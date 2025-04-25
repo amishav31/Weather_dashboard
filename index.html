@@ -2,26 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lucknow Live AQI & Weather</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucknow AQI & Weather Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="dashboard">
-    <div class="block" id="aqi-block">
-      <h1>AQI: <span id="aqi-value">--</span></h1>
-      <h2 id="aqi-status">Loading...</h2>
+  <div class="container">
+    <div class="header">
+      <h1>Lucknow Air Quality Index (AQI)</h1>
+      <p>Real-time PM2.5, PM10 air pollution level in Uttar Pradesh</p>
+      <p class="updated">Last Updated: <span id="last-updated">--</span></p>
     </div>
 
-    <div class="block" id="weather-block">
-      <h1>Temp: <span id="temperature">--</span>°C</h1>
-      <h2>Humidity: <span id="humidity">--</span>%</h2>
-      <h2>Wind: <span id="wind">--</span> km/h</h2>
-    </div>
+    <div class="main-box">
+      <div class="aqi-box">
+        <div class="live">Live AQI</div>
+        <div id="aqi-value">141</div>
+        <div class="aqi-status">Air Quality is <span class="status">Poor</span></div>
+        <div class="aqi-stats">
+          <p>PM10: <span id="pm10">135 µg/m³</span></p>
+          <p>PM2.5: <span id="pm25">52 µg/m³</span></p>
+        </div>
+        <div class="scale">
+          <img src="scale.png" alt="AQI scale" />
+        </div>
+      </div>
 
-    <div class="block" id="traffic-block">
-      <h1>Traffic Alerts</h1>
-      <ul id="traffic-list"><li>Loading...</li></ul>
+      <div class="weather-box">
+        <div class="temp"><span id="temp">40°C</span> <span>Mist</span></div>
+        <p>💧 Humidity: <span id="humidity">12%</span></p>
+        <p>🌬️ Wind Speed: <span id="wind">13 km/h</span></p>
+        <p>☀️ UV Index: <span id="uv">11</span></p>
+      </div>
+
+      <div class="character">
+        <img src="coughing-boy.png" alt="Boy coughing" />
+      </div>
     </div>
   </div>
 
