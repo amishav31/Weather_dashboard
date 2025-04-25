@@ -1,46 +1,95 @@
 body {
   margin: 0;
-  padding: 0;
-  background: black;
-  color: white;
   font-family: 'Segoe UI', sans-serif;
-  overflow: hidden;
+  background-color: #121212;
+  color: #fff;
 }
 
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-  gap: 40px;
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-.block {
-  padding: 20px 40px;
+.header h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.updated {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.main-box {
+  background-color: #1e1e1e;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  min-width: 80%;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  position: relative;
 }
 
-h1 {
-  font-size: 4rem;
+.aqi-box, .weather-box {
+  flex: 1;
+}
+
+.aqi-box {
+  background: linear-gradient(to right, #ffb347, #ffcc33);
+  border-radius: 16px;
+  padding: 15px;
+  color: #000;
+}
+
+.aqi-box .live {
+  background: red;
+  color: white;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+#aqi-value {
+  font-size: 48px;
+  font-weight: bold;
   margin: 10px 0;
 }
 
-h2 {
-  font-size: 2rem;
+.aqi-status {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.status {
+  font-weight: bold;
+  color: darkorange;
+}
+
+.aqi-stats p {
   margin: 5px 0;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.scale img {
+  width: 100%;
+  margin-top: 10px;
 }
 
-li {
-  font-size: 1.5rem;
+.weather-box {
+  background: #2c2c2c;
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.weather-box .temp {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.character img {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 90px;
 }
