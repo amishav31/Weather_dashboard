@@ -14,23 +14,25 @@
     }
 
     body {
-      background: #0d1117;
+      background: linear-gradient(to bottom right, #0d1117, #1a1f2c);
       color: #ffffff;
       padding: 2rem;
     }
 
     .container {
-      max-width: 700px;
+      max-width: 800px;
       margin: 0 auto;
-      background: #161b22;
+      background: rgba(22, 27, 34, 0.95);
       border-radius: 12px;
       padding: 2rem;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #90cdf4;
     }
 
     .section {
@@ -42,32 +44,44 @@
       justify-content: space-between;
       align-items: center;
       background: #222;
-      padding: 1rem;
-      border-radius: 10px;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 6px solid #00e400;
     }
 
     .aqi-value {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
     }
 
     .aqi-status {
       font-size: 1.2rem;
-      padding: 0.2rem 0.6rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 6px;
+      margin: 0.5rem 0;
+      display: inline-block;
       color: #000;
+      font-weight: bold;
     }
 
     .weather-box {
       background: #222;
-      padding: 1rem;
-      border-radius: 10px;
+      padding: 1.2rem;
+      border-radius: 12px;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    ul {
+      list-style: disc inside;
+    }
+
+    img.cartoon {
+      width: 100px;
     }
   </style>
 </head>
@@ -83,7 +97,7 @@
         <div>PM2.5: <span id="pm25">--</span> µg/m³</div>
       </div>
       <div>
-        <img src="https://cdn-icons-png.flaticon.com/512/147/147258.png" width="80" alt="AQI Icon">
+        <img class="cartoon" src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Cartoon">
       </div>
     </div>
 
@@ -147,8 +161,9 @@
           status = "Hazardous ☠️"; bgColor = "#7e0023";
         }
 
-        document.getElementById('aqi-status').textContent = status;
-        document.getElementById('aqi-status').style.backgroundColor = bgColor;
+        const statusBox = document.getElementById('aqi-status');
+        statusBox.textContent = status;
+        statusBox.style.backgroundColor = bgColor;
       } catch (error) {
         console.error(error);
       }
@@ -187,3 +202,4 @@
   </script>
 </body>
 </html>
+
