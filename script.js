@@ -5,7 +5,6 @@ const trafficAPI = "https://api.tomtom.com/traffic/services/5/incidentDetails?ke
 async function fetchWeather() {
   try {
     const res = await fetch(weatherAPI);
-    if (!res.ok) throw new Error('Failed to fetch weather data');
     const data = await res.json();
     const current = data.current_weather;
 
@@ -20,7 +19,6 @@ async function fetchWeather() {
 async function fetchAirQuality() {
   try {
     const res = await fetch(airQualityAPI);
-    if (!res.ok) throw new Error('Failed to fetch air quality data');
     const data = await res.json();
     const pm25 = data.hourly.pm2_5[0];
     const pm10 = data.hourly.pm10[0];
@@ -29,9 +27,7 @@ async function fetchAirQuality() {
     document.getElementById('pm10').textContent = pm10;
 
     const aqiStatus = document.getElementById('aqi-status');
-    let status = '';
-    let bgColor = '';
-    let emoji = '';
+    let status = '', bgColor = '', emoji = '';
 
     if (pm25 <= 50) {
       status = 'Good';
@@ -70,11 +66,10 @@ async function fetchAirQuality() {
 async function fetchTraffic() {
   try {
     const res = await fetch(trafficAPI);
-    if (!res.ok) throw new Error('Failed to fetch traffic data');
     const data = await res.json();
     const incidents = data.incidents || [];
     const list = document.getElementById('traffic-list');
-    
+
     if (incidents.length === 0) {
       list.innerHTML = '<li>No incidents currently.</li>';
     } else {
@@ -89,3 +84,4 @@ async function fetchTraffic() {
 fetchWeather();
 fetchAirQuality();
 fetchTraffic();
+
