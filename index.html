@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lucknow AQI Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -15,30 +15,37 @@
     }
 
     body {
-      background: linear-gradient(145deg, #0f172a, #1e293b);
+      background: linear-gradient(to bottom, #1e1e2f, #3e3e50);
       color: #fff;
       padding: 2rem;
       min-height: 100vh;
     }
 
-    .container {
-      max-width: 800px;
+    .dashboard {
+      max-width: 1000px;
       margin: auto;
       background: #1e293b;
       border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 1s ease-out;
+      position: relative;
     }
 
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+    .live-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: red;
+      color: white;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 25px;
+      font-weight: bold;
     }
 
     h1 {
-      font-size: 2rem;
       text-align: center;
+      font-size: 2rem;
       margin-bottom: 2rem;
       color: #93c5fd;
     }
@@ -54,33 +61,67 @@
     }
 
     .aqi-value {
-      font-size: 2.5rem;
+      font-size: 4rem;
       font-weight: bold;
+      color: orange;
     }
 
     .aqi-status {
-      margin-top: 0.5rem;
       font-size: 1.2rem;
       padding: 0.3rem 0.8rem;
       border-radius: 8px;
       font-weight: bold;
+      margin: 10px 0;
+      display: inline-block;
+    }
+
+    .pm-values {
+      font-size: 1rem;
+    }
+
+    #lottie-icon {
+      width: 100px;
+      height: 100px;
+    }
+
+    .scale-bar {
+      display: flex;
+      height: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .scale-bar div { flex: 1; }
+    .scale-labels {
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
     }
 
     .weather-box {
-      background: #111827;
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
     }
 
-    .row {
+    .weather-box h2 {
+      font-size: 40px;
+      margin: 10px 0 0;
+    }
+
+    .weather-box .details {
       display: flex;
       justify-content: space-around;
-      margin-top: 0.5rem;
+      font-size: 14px;
+      margin-top: 10px;
     }
 
     .traffic-updates {
       background: #111827;
+      margin-top: 20px;
       padding: 1rem;
       border-radius: 12px;
     }
@@ -90,69 +131,58 @@
       list-style: disc;
     }
 
-    #lottie-icon {
-      width: 100px;
-      height: 100px;
-    }
-
-    .aqi-scale {
-      margin-top: 1rem;
-    }
-
-    .scale-bar {
-      display: flex;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .scale-bar div {
-      flex: 1;
-    }
-
-    .scale-labels {
-      font-size: 0.8rem;
-      margin-top: 4px;
-      display: flex;
-      justify-content: space-between;
+    .cartoon {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 130px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="dashboard">
+    <div class="live-badge">● Live AQI</div>
     <h1>Lucknow Air Quality Index (AQI)</h1>
 
     <div class="aqi-box">
       <div>
         <div class="aqi-value" id="aqi-value">--</div>
         <div class="aqi-status" id="aqi-status">--</div>
-        <div>PM10: <span id="pm10">--</span> µg/m³</div>
-        <div>PM2.5: <span id="pm25">--</span> µg/m³</div>
+        <div class="pm-values">
+          PM10: <span id="pm10">--</span> µg/m³<br />
+          PM2.5: <span id="pm25">--</span> µg/m³
+        </div>
       </div>
       <div id="lottie-icon"></div>
     </div>
 
-    <!-- AQI SCALE BAR -->
-    <div class="aqi-scale">
-      <div class="scale-bar">
-        <div style="background: #00e400;"></div>
-        <div style="background: #ffff00;"></div>
-        <div style="background: #ff7e00;"></div>
-        <div style="background: #ff0000;"></div>
-        <div style="background: #8f3f97;"></div>
-        <div style="background: #7e0023;"></div>
-      </div>
-      <div class="scale-labels">
-        <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
-      </div>
+    <div class="scale-bar">
+      <div style="background: #00e400;"></div>
+      <div style="background: #ffff00;"></div>
+      <div style="background: #ff7e00;"></div>
+      <div style="background: #ff0000;"></div>
+      <div style="background: #8f3f97;"></div>
+      <div style="background: #7e0023;"></div>
+    </div>
+    <div class="scale-labels">
+      <span>Good</span><span>Moderate</span><span>Sensitive</span><span>Unhealthy</span><span>Severe</span><span>Hazardous</span>
     </div>
 
     <div class="weather-box">
-      <div><strong>Temperature:</strong> <span id="temperature">--</span>°C</div>
-      <div class="row">
-        <div>💧 Humidity: <span id="humidity">--</span>%</div>
-        <div>💨 Wind Speed: <span id="wind">--</span> km/h</div>
-        <div>🌞 UV Index: <span id="uv">--</span></div>
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/fog-day.png" height="40"/>
+      <h2><span id="temperature">--</span>°C</h2>
+      <p id="weather">Weather</p>
+      <div class="details">
+        <div>
+          💧<br />Humidity<br /><b><span id="humidity">--</span>%</b>
+        </div>
+        <div>
+          🌬️<br />Wind<br /><b><span id="wind">--</span> km/h</b>
+        </div>
+        <div>
+          ☀️<br />UV Index<br /><b><span id="uv">--</span></b>
+        </div>
       </div>
     </div>
 
@@ -160,11 +190,11 @@
       <h2>Traffic Updates</h2>
       <ul id="traffic-list">Loading...</ul>
     </div>
+
+    <img src="https://i.imgur.com/6qaJrMg.png" alt="Cartoon" class="cartoon">
   </div>
 
-  <!-- Lottie Animation Script -->
   <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
-
   <script>
     const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
     const airQualityAPI = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=26.8467&longitude=80.9462&hourly=pm2_5,pm10";
@@ -180,6 +210,7 @@
         document.getElementById('wind').textContent = current.windspeed;
         document.getElementById('humidity').textContent = data.hourly.relativehumidity_2m[0];
         document.getElementById('uv').textContent = data.hourly.uv_index[0];
+        document.getElementById('weather').textContent = current.weathercode === 45 ? 'Mist' : 'Clear';
       } catch (error) {
         console.error(error);
       }
@@ -239,7 +270,6 @@
       }
     }
 
-    // Lottie Animation Init
     lottie.loadAnimation({
       container: document.getElementById('lottie-icon'),
       renderer: 'svg',
