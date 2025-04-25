@@ -1,76 +1,46 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #232526, #414345);
+  padding: 0;
+  background: black;
   color: white;
-  line-height: 1.6;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-  box-sizing: border-box;
-}
-
-header {
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
+  gap: 40px;
 }
 
-.card {
+.block {
+  padding: 20px 40px;
+  border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  min-width: 80%;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
-.card:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.02);
+h1 {
+  font-size: 4rem;
+  margin: 10px 0;
 }
 
-.card h2, .card p {
+h2 {
+  font-size: 2rem;
+  margin: 5px 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
   margin: 0;
-  padding: 0.5rem 0;
 }
 
-.card a {
-  color: #00e400;
-  text-decoration: none;
-}
-
-.card a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-  }
-
-  .card {
-    padding: 1rem;
-  }
-
-  header {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 1rem;
-  }
-
-  .card {
-    padding: 0.75rem;
-  }
-
-  header {
-    font-size: 1.2rem;
-  }
+li {
+  font-size: 1.5rem;
 }
