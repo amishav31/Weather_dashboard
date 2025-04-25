@@ -3,37 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lucknow AQI & Weather Dashboard</title>
+  <title>Lucknow Live AQI & Weather</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Lucknow AQI & Weather Dashboard</h1>
-    </header>
+  <div class="dashboard">
+    <div class="block" id="aqi-block">
+      <h1>AQI: <span id="aqi-value">--</span></h1>
+      <h2 id="aqi-status">Loading...</h2>
+    </div>
 
-    <section id="aqi-card" class="card">
-      <h2>Air Quality Index (AQI)</h2>
-      <div id="aqi-status">Loading...</div>
-      <p><strong>PM2.5:</strong> <span id="pm25">--</span> µg/m³</p>
-      <p><strong>PM10:</strong> <span id="pm10">--</span> µg/m³</p>
-    </section>
+    <div class="block" id="weather-block">
+      <h1>Temp: <span id="temperature">--</span>°C</h1>
+      <h2>Humidity: <span id="humidity">--</span>%</h2>
+      <h2>Wind: <span id="wind">--</span> km/h</h2>
+    </div>
 
-    <section id="weather-card" class="card">
-      <h2>Current Weather</h2>
-      <p><strong>Temperature:</strong> <span id="temperature">--</span>°C</p>
-      <p><strong>Humidity:</strong> <span id="humidity">--</span>%</p>
-      <p><strong>Wind Speed:</strong> <span id="wind">--</span> km/h</p>
-    </section>
-
-    <section id="traffic-card" class="card">
-      <h2>Traffic Incidents</h2>
+    <div class="block" id="traffic-block">
+      <h1>Traffic Alerts</h1>
       <ul id="traffic-list"><li>Loading...</li></ul>
-    </section>
-
-    <footer>
-      <p>Powered by Open-Meteo & TomTom</p>
-    </footer>
+    </div>
   </div>
 
   <script src="script.js"></script>
