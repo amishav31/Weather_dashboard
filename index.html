@@ -3,168 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lucknow AQI, Weather & Traffic Dashboard</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: #f2f2f2;
-      color: #333;
-    }
-
-    header {
-      background: #9b1c31;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-      font-size: 1.6rem;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 2rem;
-    }
-
-    .title {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: #444;
-    }
-
-    .value {
-      font-size: 1.1rem;
-      margin: 0.3rem 0;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-
-    .good { background-color: #a8e05f; color: #000; }
-    .moderate { background-color: #fdd74b; color: #000; }
-    .unhealthy { background-color: #f57e42; color: #fff; }
-    .very-unhealthy { background-color: #c6414a; color: #fff; }
-    .hazardous { background-color: #8f3f97; color: #fff; }
-
-    footer {
-      text-align: center;
-      margin: 2rem 0;
-      color: #666;
-    }
-  </style>
+  <title>Lucknow AQI & Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>Lucknow AQI, Weather & Traffic Dashboard</header>
-
   <div class="container">
-    <div class="card" id="aqiCard">
-      <div class="title">Air Quality Index (AQI)</div>
-      <div class="value">Live AQI: <span id="aqiValue">--</span> <span id="aqiStatus" class="badge">--</span></div>
-      <div class="value">PM2.5: <span id="pm25">--</span> µg/m³</div>
-      <div class="value">PM10: <span id="pm10">--</span> µg/m³</div>
-    </div>
+    <header>
+      <h1>Lucknow AQI & Weather Dashboard</h1>
+    </header>
 
-    <div class="card">
-      <div class="title">Current Weather</div>
-      <div class="value">Temperature: <span id="temp">--</span>°C</div>
-      <div class="value">Humidity: <span id="humidity">--</span>%</div>
-      <div class="value">Wind Speed: <span id="wind">--</span> km/h</div>
-    </div>
+    <section id="aqi-card" class="card">
+      <h2>Air Quality Index (AQI)</h2>
+      <div id="aqi-status">Loading...</div>
+      <p><strong>PM2.5:</strong> <span id="pm25">--</span> µg/m³</p>
+      <p><strong>PM10:</strong> <span id="pm10">--</span> µg/m³</p>
+    </section>
 
-    <div class="card">
-      <div class="title">Traffic Incidents</div>
-      <ul id="traffic"></ul>
-    </div>
+    <section id="weather-card" class="card">
+      <h2>Current Weather</h2>
+      <p><strong>Temperature:</strong> <span id="temperature">--</span>°C</p>
+      <p><strong>Humidity:</strong> <span id="humidity">--</span>%</p>
+      <p><strong>Wind Speed:</strong> <span id="wind">--</span> km/h</p>
+    </section>
+
+    <section id="traffic-card" class="card">
+      <h2>Traffic Incidents</h2>
+      <ul id="traffic-list"><li>Loading...</li></ul>
+    </section>
+
+    <footer>
+      <p>Powered by Open-Meteo & TomTom</p>
+    </footer>
   </div>
 
-  <footer>Powered by Open-Meteo & TomTom</footer>
-
-  <script>
-    const lat = 26.8467;
-    const lon = 80.9462;
-
-    async function fetchAQI() {
-      const res = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=pm2_5,pm10`);
-      const data = await res.json();
-      const latestHour = data.hourly.time.length - 1;
-
-      const pm25 = data.hourly.pm2_5[latestHour];
-      const pm10 = data.hourly.pm10[latestHour];
-      const aqi = Math.round(pm25 * 2); // approximate AQI calc from pm2.5
-
-      document.getElementById("aqiValue").textContent = aqi;
-      document.getElementById("pm25").textContent = pm25;
-      document.getElementById("pm10").textContent = pm10;
-
-      const status = document.getElementById("aqiStatus");
-
-      if (aqi <= 50) {
-        status.textContent = "Good";
-        status.className = "badge good";
-      } else if (aqi <= 100) {
-        status.textContent = "Moderate";
-        status.className = "badge moderate";
-      } else if (aqi <= 150) {
-        status.textContent = "Unhealthy for Sensitive Groups";
-        status.className = "badge unhealthy";
-      } else if (aqi <= 200) {
-        status.textContent = "Unhealthy";
-        status.className = "badge very-unhealthy";
-      } else {
-        status.textContent = "Hazardous";
-        status.className = "badge hazardous";
-      }
-    }
-
-    async function fetchWeather() {
-      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-      const data = await res.json();
-      const weather = data.current_weather;
-
-      document.getElementById("temp").textContent = weather.temperature;
-      document.getElementById("wind").textContent = weather.windspeed;
-      // Humidity not available in current_weather, can add `&hourly=relative_humidity_2m` if needed
-    }
-
-    async function fetchTraffic() {
-      const bbox = "80.9,26.8,81.0,26.9";
-      const apiKey = "OSs8MdHT9bfR1pKKwHq8ErBcuNgZGMFA";
-      const res = await fetch(`https://api.tomtom.com/traffic/services/5/incidentDetails?key=${apiKey}&bbox=${bbox}&fields=te,ac,di&language=en&category=accident`);
-      const data = await res.json();
-      const list = document.getElementById("traffic");
-      list.innerHTML = "";
-
-      if (data?.incidents?.length > 0) {
-        data.incidents.forEach(inc => {
-          const li = document.createElement("li");
-          li.textContent = inc.properties.eventDescription || "Traffic incident reported.";
-          list.appendChild(li);
-        });
-      } else {
-        const li = document.createElement("li");
-        li.textContent = "No incidents currently.";
-        list.appendChild(li);
-      }
-    }
-
-    fetchAQI();
-    fetchWeather();
-    fetchTraffic();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
