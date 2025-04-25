@@ -15,11 +15,11 @@
     }
 
     body {
-      background: linear-gradient(145deg, #0f172a, #1e293b);
       color: #fff;
       padding: 2rem;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background 1s ease-in-out;
     }
 
     .container {
@@ -155,7 +155,6 @@
       <div id="lottie-icon"></div>
     </div>
 
-    <!-- AQI SCALE BAR -->
     <div class="aqi-scale">
       <div class="scale-bar">
         <div style="background: #00e400;"></div>
@@ -224,61 +223,4 @@
         if (pm25 <= 50) {
           status = "Good 😊"; bgColor = "#00e400";
         } else if (pm25 <= 100) {
-          status = "Moderate 😐"; bgColor = "#ffff00";
-        } else if (pm25 <= 150) {
-          status = "Sensitive 😷"; bgColor = "#ff7e00";
-        } else if (pm25 <= 200) {
-          status = "Unhealthy 🤢"; bgColor = "#ff0000";
-        } else {
-          status = "Hazardous ☠️"; bgColor = "#7e0023";
-        }
-
-        const statusEl = document.getElementById('aqi-status');
-        statusEl.textContent = status;
-        statusEl.style.backgroundColor = bgColor;
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    async function fetchTraffic() {
-      try {
-        const res = await fetch(trafficAPI);
-        const data = await res.json();
-        const incidents = data.incidents || [];
-        const list = document.getElementById('traffic-list');
-
-        if (incidents.length === 0) {
-          list.innerHTML = '<li>No incidents</li>';
-        } else {
-          list.innerHTML = incidents
-            .slice(0, 3)
-            .map(inc => `<li>${inc.properties.eventCode || 'Traffic Alert'}</li>`)
-            .join('');
-        }
-      } catch (error) {
-        console.error(error);
-        document.getElementById('traffic-list').innerHTML = '<li>Data unavailable</li>';
-      }
-    }
-
-    lottie.loadAnimation({
-      container: document.getElementById('lottie-icon'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/cc1669fc-d4c3-4c79-96db-0a4bcd46a472/wXZ2ZqxjDi.json'
-    });
-
-    fetchWeather();
-    fetchAirQuality();
-    fetchTraffic();
-
-    setInterval(() => {
-      fetchWeather();
-      fetchAirQuality();
-      fetchTraffic();
-    }, 300000);
-  </script>
-</body>
-</html>
+          status = "Moderate 😐"; bgColor = "#
