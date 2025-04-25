@@ -1,46 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lucknow AQI & Weather Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #0d1117;
+      color: #ffffff;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #161b22;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .aqi-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .aqi-value {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .aqi-status {
+      font-size: 1.2rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      color: #000;
+    }
+
+    .weather-box {
+      background: #222;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>Lucknow Air Quality Index (AQI)</h1>
-      <p>Real-time PM2.5, PM10 air pollution level in Uttar Pradesh</p>
-      <p class="updated">Last Updated: <span id="last-updated">--</span></p>
+    <h1>Lucknow Air Quality Index (AQI)</h1>
+
+    <div class="section aqi-box" id="aqi-block">
+      <div>
+        <div class="aqi-value" id="aqi-value">--</div>
+        <div class="aqi-status" id="aqi-status">--</div>
+        <div>PM10: <span id="pm10">--</span> µg/m³</div>
+        <div>PM2.5: <span id="pm25">--</span> µg/m³</div>
+      </div>
+      <div>
+        <img src="https://cdn-icons-png.flaticon.com/512/147/147258.png" width="80" alt="AQI Icon">
+      </div>
     </div>
 
-    <div class="main-box">
-      <div class="aqi-box">
-        <div class="live">Live AQI</div>
-        <div id="aqi-value">141</div>
-        <div class="aqi-status">Air Quality is <span class="status">Poor</span></div>
-        <div class="aqi-stats">
-          <p>PM10: <span id="pm10">135 µg/m³</span></p>
-          <p>PM2.5: <span id="pm25">52 µg/m³</span></p>
-        </div>
-        <div class="scale">
-          <img src="scale.png" alt="AQI scale" />
-        </div>
+    <div class="section weather-box">
+      <div><strong>Temperature:</strong> <span id="temperature">--</span>°C</div>
+      <div class="row">
+        <div>💧 Humidity: <span id="humidity">--</span>%</div>
+        <div>💨 Wind Speed: <span id="wind">--</span> km/h</div>
+        <div>🌞 UV Index: <span id="uv">--</span></div>
       </div>
+    </div>
 
-      <div class="weather-box">
-        <div class="temp"><span id="temp">40°C</span> <span>Mist</span></div>
-        <p>💧 Humidity: <span id="humidity">12%</span></p>
-        <p>🌬️ Wind Speed: <span id="wind">13 km/h</span></p>
-        <p>☀️ UV Index: <span id="uv">11</span></p>
-      </div>
-
-      <div class="character">
-        <img src="coughing-boy.png" alt="Boy coughing" />
-      </div>
+    <div class="section">
+      <h2>Traffic Updates</h2>
+      <ul id="traffic-list">Loading...</ul>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
+    const airQualityAPI = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=26.8467&longitude=80.9462&hourly=pm2_5,pm10";
+    const trafficAPI = "https://api.tomtom.com/traffic/services/5/incidentDetails?key=OSs8MdHT9bfR1pKKwHq8ErBcuNgZGMFA&bbox=80.9000,26.8000,81.0000,26.9000";
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch(weatherAPI);
+        const data = await res.json();
+        const current = data.current_weather;
+
+        document.getElementById('temperature').textContent = current.temperature;
+        document.getElementById('wind').textContent = current.windspeed;
+        document.getElementById('humidity').textContent = data.hourly.relativehumidity_2m[0];
+        document.getElementById('uv').textContent = data.hourly.uv_index[0];
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function fetchAirQuality() {
+      try {
+        const res = await fetch(airQualityAPI);
+        const data = await res.json();
+        const pm25 = data.hourly.pm2_5[0];
+        const pm10 = data.hourly.pm10[0];
+
+        document.getElementById('aqi-value').textContent = pm25;
+        document.getElementById('pm25').textContent = pm25;
+        document.getElementById('pm10').textContent = pm10;
+
+        let status = "", bgColor = "";
+
+        if (pm25 <= 50) {
+          status = "Good 😊"; bgColor = "#00e400";
+        } else if (pm25 <= 100) {
+          status = "Moderate 😐"; bgColor = "#ffff00";
+        } else if (pm25 <= 150) {
+          status = "Sensitive 😷"; bgColor = "#ff7e00";
+        } else if (pm25 <= 200) {
+          status = "Unhealthy 🤢"; bgColor = "#ff0000";
+        } else {
+          status = "Hazardous ☠️"; bgColor = "#7e0023";
+        }
+
+        document.getElementById('aqi-status').textContent = status;
+        document.getElementById('aqi-status').style.backgroundColor = bgColor;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function fetchTraffic() {
+      try {
+        const res = await fetch(trafficAPI);
+        const data = await res.json();
+        const incidents = data.incidents || [];
+        const list = document.getElementById('traffic-list');
+
+        if (incidents.length === 0) {
+          list.innerHTML = '<li>No incidents</li>';
+        } else {
+          list.innerHTML = incidents
+            .slice(0, 3)
+            .map(inc => `<li>${inc.properties.eventCode || 'Traffic Alert'}</li>`)
+            .join('');
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('traffic-list').innerHTML = '<li>Data unavailable</li>';
+      }
+    }
+
+    fetchWeather();
+    fetchAirQuality();
+    fetchTraffic();
+
+    setInterval(() => {
+      fetchWeather();
+      fetchAirQuality();
+      fetchTraffic();
+    }, 300000);
+  </script>
 </body>
 </html>
