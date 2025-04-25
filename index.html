@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Lucknow AQI Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
     * {
       margin: 0;
@@ -40,7 +41,6 @@
       text-align: center;
       margin-bottom: 2rem;
       color: #93c5fd;
-      animation: fadeIn 1s ease-in-out;
     }
 
     .aqi-box {
@@ -50,8 +50,7 @@
       background: #111827;
       border-radius: 12px;
       padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      animation: fadeIn 1s ease-in-out;
+      margin-bottom: 1rem;
     }
 
     .aqi-value {
@@ -72,7 +71,6 @@
       border-radius: 12px;
       padding: 1rem;
       margin-bottom: 1.5rem;
-      animation: fadeIn 1.5s ease-in-out;
     }
 
     .row {
@@ -85,7 +83,6 @@
       background: #111827;
       padding: 1rem;
       border-radius: 12px;
-      animation: fadeIn 2s ease-in-out;
     }
 
     .traffic-updates ul {
@@ -93,15 +90,31 @@
       list-style: disc;
     }
 
-    img.icon {
-      width: 90px;
-      animation: float 3s ease-in-out infinite;
+    #lottie-icon {
+      width: 100px;
+      height: 100px;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0); }
+    .aqi-scale {
+      margin-top: 1rem;
+    }
+
+    .scale-bar {
+      display: flex;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .scale-bar div {
+      flex: 1;
+    }
+
+    .scale-labels {
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
     }
   </style>
 </head>
@@ -116,7 +129,22 @@
         <div>PM10: <span id="pm10">--</span> µg/m³</div>
         <div>PM2.5: <span id="pm25">--</span> µg/m³</div>
       </div>
-      <img class="icon" src="https://cdn-icons-png.flaticon.com/512/147/147258.png" alt="Icon">
+      <div id="lottie-icon"></div>
+    </div>
+
+    <!-- AQI SCALE BAR -->
+    <div class="aqi-scale">
+      <div class="scale-bar">
+        <div style="background: #00e400;"></div>
+        <div style="background: #ffff00;"></div>
+        <div style="background: #ff7e00;"></div>
+        <div style="background: #ff0000;"></div>
+        <div style="background: #8f3f97;"></div>
+        <div style="background: #7e0023;"></div>
+      </div>
+      <div class="scale-labels">
+        <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
+      </div>
     </div>
 
     <div class="weather-box">
@@ -133,6 +161,9 @@
       <ul id="traffic-list">Loading...</ul>
     </div>
   </div>
+
+  <!-- Lottie Animation Script -->
+  <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
 
   <script>
     const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
@@ -207,6 +238,15 @@
         document.getElementById('traffic-list').innerHTML = '<li>Data unavailable</li>';
       }
     }
+
+    // Lottie Animation Init
+    lottie.loadAnimation({
+      container: document.getElementById('lottie-icon'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'https://lottie.host/cc1669fc-d4c3-4c79-96db-0a4bcd46a472/wXZ2ZqxjDi.json',
+    });
 
     fetchWeather();
     fetchAirQuality();
