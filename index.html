@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lucknow AQI & Weather Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucknow AQI Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -14,39 +14,44 @@
     }
 
     body {
-      background: linear-gradient(to bottom right, #0d1117, #1a1f2c);
-      color: #ffffff;
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: #fff;
       padding: 2rem;
+      min-height: 100vh;
     }
 
     .container {
       max-width: 800px;
-      margin: 0 auto;
-      background: rgba(22, 27, 34, 0.95);
-      border-radius: 12px;
+      margin: auto;
+      background: #1e293b;
+      border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 1.5rem;
       text-align: center;
-      color: #90cdf4;
-    }
-
-    .section {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      color: #93c5fd;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .aqi-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #222;
-      padding: 1.5rem;
+      background: #111827;
       border-radius: 12px;
-      border-left: 6px solid #00e400;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .aqi-value {
@@ -55,33 +60,48 @@
     }
 
     .aqi-status {
+      margin-top: 0.5rem;
       font-size: 1.2rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      margin: 0.5rem 0;
-      display: inline-block;
-      color: #000;
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
       font-weight: bold;
     }
 
     .weather-box {
-      background: #222;
-      padding: 1.2rem;
+      background: #111827;
       border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1.5s ease-in-out;
     }
 
     .row {
       display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
+      justify-content: space-around;
+      margin-top: 0.5rem;
     }
 
-    ul {
-      list-style: disc inside;
+    .traffic-updates {
+      background: #111827;
+      padding: 1rem;
+      border-radius: 12px;
+      animation: fadeIn 2s ease-in-out;
     }
 
-    img.cartoon {
-      width: 100px;
+    .traffic-updates ul {
+      padding-left: 1.5rem;
+      list-style: disc;
+    }
+
+    img.icon {
+      width: 90px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
     }
   </style>
 </head>
@@ -89,19 +109,17 @@
   <div class="container">
     <h1>Lucknow Air Quality Index (AQI)</h1>
 
-    <div class="section aqi-box" id="aqi-block">
+    <div class="aqi-box">
       <div>
         <div class="aqi-value" id="aqi-value">--</div>
         <div class="aqi-status" id="aqi-status">--</div>
         <div>PM10: <span id="pm10">--</span> µg/m³</div>
         <div>PM2.5: <span id="pm25">--</span> µg/m³</div>
       </div>
-      <div>
-        <img class="cartoon" src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Cartoon">
-      </div>
+      <img class="icon" src="https://cdn-icons-png.flaticon.com/512/147/147258.png" alt="Icon">
     </div>
 
-    <div class="section weather-box">
+    <div class="weather-box">
       <div><strong>Temperature:</strong> <span id="temperature">--</span>°C</div>
       <div class="row">
         <div>💧 Humidity: <span id="humidity">--</span>%</div>
@@ -110,7 +128,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="traffic-updates">
       <h2>Traffic Updates</h2>
       <ul id="traffic-list">Loading...</ul>
     </div>
@@ -143,9 +161,9 @@
         const pm25 = data.hourly.pm2_5[0];
         const pm10 = data.hourly.pm10[0];
 
-        document.getElementById('aqi-value').textContent = pm25;
-        document.getElementById('pm25').textContent = pm25;
-        document.getElementById('pm10').textContent = pm10;
+        document.getElementById('aqi-value').textContent = pm25.toFixed(1);
+        document.getElementById('pm25').textContent = pm25.toFixed(1);
+        document.getElementById('pm10').textContent = pm10.toFixed(1);
 
         let status = "", bgColor = "";
 
@@ -161,9 +179,9 @@
           status = "Hazardous ☠️"; bgColor = "#7e0023";
         }
 
-        const statusBox = document.getElementById('aqi-status');
-        statusBox.textContent = status;
-        statusBox.style.backgroundColor = bgColor;
+        const statusEl = document.getElementById('aqi-status');
+        statusEl.textContent = status;
+        statusEl.style.backgroundColor = bgColor;
       } catch (error) {
         console.error(error);
       }
@@ -202,4 +220,3 @@
   </script>
 </body>
 </html>
-
