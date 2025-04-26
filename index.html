@@ -21,6 +21,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background-color 0.5s ease;
     }
     .container {
       width: 100%;
@@ -30,6 +31,8 @@
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(0,255,0,0.5);
       text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
     }
     h1 {
       font-size: 1.8rem;
@@ -41,11 +44,14 @@
       padding: 2rem;
       border-radius: 15px;
       margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.5s;
     }
     .aqi-value {
       font-size: 3.5rem;
       font-weight: bold;
       color: white;
+      transition: color 0.5s ease;
     }
     .status {
       display: inline-block;
@@ -54,6 +60,7 @@
       border-radius: 20px;
       font-weight: bold;
       font-size: 1.1rem;
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
     .pm-info {
       margin-top: 1rem;
@@ -70,10 +77,16 @@
     .maroon { background: #7f1d1d; }
     .scale-numbers { display: flex; justify-content: space-between; font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem; }
     .weather-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 1.5rem; color: #cbd5e1; }
-    .traffic-updates { background: #1f2937; margin-top: 1.5rem; padding: 1rem; border-radius: 10px; }
+    .traffic-updates { background: #1f2937; margin-top: 1.5rem; padding: 1rem; border-radius: 10px; opacity: 0; animation: fadeIn 1s forwards 1s; }
     .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
     .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
     @media(max-width: 600px) { .info-grid { flex-direction: column; } }
   </style>
 </head>
@@ -137,7 +150,7 @@
         document.getElementById('humidity').textContent = data.hourly.relativehumidity_2m[0];
         document.getElementById('uv').textContent = data.hourly.uv_index[0];
       } catch (error) {
-        console.error(error);
+        console.error('Weather fetch error:', error);
       }
     }
 
@@ -173,12 +186,13 @@
 
         aqiStatus.textContent = status;
         aqiStatus.style.backgroundColor = bgColor;
+        aqiStatus.style.color = "#fff";
         card.style.boxShadow = `0 0 20px ${bgColor}80`;
 
         const now = new Date();
         document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
       } catch (error) {
-        console.error(error);
+        console.error('Air Quality fetch error:', error);
       }
     }
 
@@ -186,29 +200,28 @@
       try {
         const res = await fetch(trafficAPI);
         const data = await res.json();
-        const incidents = data.incidents || [];
+        const incidents = data.incidentDetails || [];
         const list = document.getElementById('traffic-list');
 
         if (incidents.length === 0) {
-          list.innerHTML = '<li>No incidents</li>';
+          list.innerHTML = '<li>No major incidents 🚗</li>';
         } else {
-          list.innerHTML = incidents.slice(0, 3).map(inc => `<li>${inc.properties.eventCode || 'Traffic Alert'}</li>`).join('');
+          list.innerHTML = incidents.slice(0, 3).map(inc => `<li>${inc.properties.eventDescription || 'Traffic Update'}</li>`).join('');
         }
       } catch (error) {
-        console.error(error);
-        document.getElementById('traffic-list').innerHTML = '<li>Data unavailable</li>';
+        console.error('Traffic fetch error:', error);
+        document.getElementById('traffic-list').innerHTML = '<li>Traffic data unavailable 🚧</li>';
       }
     }
 
-    fetchWeather();
-    fetchAirQuality();
-    fetchTraffic();
+    async function initDashboard() {
+      await fetchWeather();
+      await fetchAirQuality();
+      await fetchTraffic();
+    }
 
-    setInterval(() => {
-      fetchWeather();
-      fetchAirQuality();
-      fetchTraffic();
-    }, 300000); // Refresh every 5 mins
+    initDashboard();
+    setInterval(initDashboard, 5 * 60 * 1000); // Every 5 minutes
   </script>
 </body>
 </html>
