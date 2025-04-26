@@ -7,7 +7,6 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
   <!-- Font Awesome for icons -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
@@ -21,7 +20,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.5s ease;
     }
     .container {
       width: 100%;
@@ -51,7 +49,6 @@
       font-size: 3.5rem;
       font-weight: bold;
       color: white;
-      transition: color 0.5s ease;
     }
     .status {
       display: inline-block;
@@ -60,7 +57,6 @@
       border-radius: 20px;
       font-weight: bold;
       font-size: 1.1rem;
-      transition: background-color 0.5s ease, color 0.5s ease;
     }
     .pm-info {
       margin-top: 1rem;
@@ -156,48 +152,42 @@
 
     async function fetchAirQuality() {
       try {
-    const res = await fetch(airQualityAPI);
-    const data = await res.json();
-    const pm25 = data.hourly.pm2_5[0];  // PM2.5 value fetch
-    const pm10 = data.hourly.pm10[0];  // PM10 value fetch
+        const res = await fetch(airQualityAPI);
+        const data = await res.json();
+        const pm25 = data.hourly.pm2_5[0];
+        const pm10 = data.hourly.pm10[0];
 
-    // Display PM2.5 and PM10
-    document.getElementById('aqi-value').textContent = pm25.toFixed(1);
-    document.getElementById('pm25').textContent = pm25.toFixed(1);
-    document.getElementById('pm10').textContent = pm10.toFixed(1);
+        document.getElementById('aqi-value').textContent = pm25.toFixed(1);
+        document.getElementById('pm25').textContent = pm25.toFixed(1);
+        document.getElementById('pm10').textContent = pm10.toFixed(1);
 
-    // Determine AQI status based on PM2.5 value
-    let status = "", bgColor = "";
+        let status = "", bgColor = "";
 
-    // AQI Status mapping based on PM2.5 level
-    if (pm25 <= 50) {
-      status = "Good 😊"; bgColor = "#22c55e";  // Green
-    } else if (pm25 <= 100) {
-      status = "Moderate 😐"; bgColor = "#facc15";  // Yellow
-    } else if (pm25 <= 150) {
-      status = "Sensitive 😷"; bgColor = "#fb923c";  // Orange
-    } else if (pm25 <= 200) {
-      status = "Unhealthy 🤢"; bgColor = "#ef4444";  // Red
-    } else if (pm25 <= 300) {
-      status = "Very Unhealthy 😨"; bgColor = "#8b5cf6";  // Purple
-    } else {
-      status = "Hazardous ☠️"; bgColor = "#7f1d1d";  // Maroon
+        if (pm25 <= 50) {
+          status = "Good 😊"; bgColor = "#22c55e";
+        } else if (pm25 <= 100) {
+          status = "Moderate 😐"; bgColor = "#facc15";
+        } else if (pm25 <= 150) {
+          status = "Sensitive 😷"; bgColor = "#fb923c";
+        } else if (pm25 <= 200) {
+          status = "Unhealthy 🤢"; bgColor = "#ef4444";
+        } else if (pm25 <= 300) {
+          status = "Very Unhealthy 😨"; bgColor = "#8b5cf6";
+        } else {
+          status = "Hazardous ☠️"; bgColor = "#7f1d1d";
+        }
+
+        document.getElementById('aqi-status').textContent = status;
+        document.getElementById('aqi-status').style.backgroundColor = bgColor;
+        document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+
+        const now = new Date();
+        document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
+      } catch (error) {
+        console.error('Air Quality fetch error:', error);
+      }
     }
 
-    // Update AQI status text and background color
-    document.getElementById('aqi-status').textContent = status;
-    document.getElementById('aqi-status').style.backgroundColor = bgColor;
-
-    // Update card shadow color based on AQI status
-    document.getElementById('aqi-card') style.boxShadow = `0 0 20px ${bgColor}80`;
-
-    // Update last updated time
-    const now = new Date();
-    document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
-  } catch (error) {
-    console.error('Air Quality fetch error:', error);
-  }
-}
     async function fetchTraffic() {
       try {
         const res = await fetch(trafficAPI);
@@ -208,7 +198,7 @@
         if (incidents.length === 0) {
           list.innerHTML = '<li>No major incidents 🚗</li>';
         } else {
-          list.innerHTML = incidents.slice(0, 3).map(inc => `<li>${inc.properties.eventDescription || 'Traffic Update'}</li>`).join('');
+          list.innerHTML = incidents.slice(0, 3).map(inc => `<li>${inc.properties?.eventDescription || 'Traffic Update'}</li>`).join('');
         }
       } catch (error) {
         console.error('Traffic fetch error:', error);
@@ -223,7 +213,8 @@
     }
 
     initDashboard();
-    setInterval(initDashboard, 5 * 60 * 1000); // Every 5 minutes
+    setInterval(initDashboard, 5 * 60 * 1000);
   </script>
 </body>
 </html>
+
