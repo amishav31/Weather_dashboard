@@ -12,13 +12,7 @@
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body {
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #fff;
@@ -28,169 +22,105 @@
       align-items: center;
       justify-content: center;
     }
-      .container {
-  width: 100%;
-  max-width: 600px;
-  background: #111827;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,255,0,0.5);
-  text-align: center;
-}
-
-h1 {
-  font-size: 1.8rem;
-  color: #60a5fa;
-  margin-bottom: 1rem;
-}
-
-.aqi-box {
-  background: #1f2937;
-  padding: 2rem;
-  border-radius: 15px;
-  margin-bottom: 1rem;
-}
-
-.aqi-value {
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: white;
-}
-
-.status {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.status good {
-  background: #22c55e;
-  color: #fff;
-}
-
-.pm-info {
-  margin-top: 1rem;
-  color: #9ca3af;
-  font-size: 0.9rem;
-}
-
-.scale-bar {
-  display: flex;
-  margin: 1.5rem 0 0.5rem;
-  height: 10px;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.scale-bar div {
-  flex: 1;
-}
-
-.green { background: #22c55e; }
-.yellow { background: #facc15; }
-.orange { background: #fb923c; }
-.red { background: #ef4444; }
-.purple { background: #8b5cf6; }
-.maroon { background: #7f1d1d; }
-
-.scale-numbers {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #9ca3af;
-  margin-top: 0.5rem;
-}
-
-.weather-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 1.5rem;
-  color: #cbd5e1;
-}
-
-.traffic-updates {
-  background: #1f2937;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 10px;
-}
-
-.traffic-updates h2 {
-  font-size: 1.2rem;
-  color: #60a5fa;
-  margin-bottom: 10px;
-}
-
-.traffic-updates ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  color: #cbd5e1;
-}
-
-.last-updated {
-  margin-top: 1.5rem;
-  font-size: 0.8rem;
-  color: #9ca3af;
-}
-
-     
-    /* Responsive */
-    @media(max-width: 600px) {
-      .info-grid {
-        flex-direction: column;
-      }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: #111827;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,0,0.5);
+      text-align: center;
     }
+    h1 {
+      font-size: 1.8rem;
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+    .aqi-box {
+      background: #1f2937;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+    }
+    .aqi-value {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: white;
+    }
+    .status {
+      display: inline-block;
+      margin: 10px auto;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .pm-info {
+      margin-top: 1rem;
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+    .scale-bar { display: flex; margin: 1.5rem 0 0.5rem; height: 10px; border-radius: 5px; overflow: hidden; }
+    .scale-bar div { flex: 1; }
+    .green { background: #22c55e; }
+    .yellow { background: #facc15; }
+    .orange { background: #fb923c; }
+    .red { background: #ef4444; }
+    .purple { background: #8b5cf6; }
+    .maroon { background: #7f1d1d; }
+    .scale-numbers { display: flex; justify-content: space-between; font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem; }
+    .weather-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 1.5rem; color: #cbd5e1; }
+    .traffic-updates { background: #1f2937; margin-top: 1.5rem; padding: 1rem; border-radius: 10px; }
+    .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
+    .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
+    .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
+    @media(max-width: 600px) { .info-grid { flex-direction: column; } }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <div class="container">
-  <h1>Lucknow Air Quality Index (AQI)</h1>
+    <h1>Lucknow Air Quality Index (AQI)</h1>
 
-  <div class="aqi-box">
-    <div class="aqi-value">35.6</div>
-    <div class="status good">Good 😊</div>
-    <div class="pm-info">
-      <p>PM10: 78.5 µg/m³</p>
-      <p>PM2.5: 35.6 µg/m³</p>
+    <div class="aqi-box" id="aqi-card">
+      <div id="aqi-value" class="aqi-value">--</div>
+      <div id="aqi-status" class="status">--</div>
+      <div class="pm-info">
+        <p>PM10: <span id="pm10">--</span> µg/m³</p>
+        <p>PM2.5: <span id="pm25">--</span> µg/m³</p>
+      </div>
+
+      <div class="scale-bar">
+        <div class="green"></div>
+        <div class="yellow"></div>
+        <div class="orange"></div>
+        <div class="red"></div>
+        <div class="purple"></div>
+        <div class="maroon"></div>
+      </div>
+
+      <div class="scale-numbers">
+        <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
+      </div>
     </div>
 
-    <div class="scale-bar">
-      <div class="green"></div>
-      <div class="yellow"></div>
-      <div class="orange"></div>
-      <div class="red"></div>
-      <div class="purple"></div>
-      <div class="maroon"></div>
+    <div class="weather-stats">
+      <div>🌡️ Temperature: <span id="temperature">--</span>°C</div>
+      <div>💧 Humidity: <span id="humidity">--</span>%</div>
+      <div>🌬️ Wind Speed: <span id="wind">--</span> km/h</div>
+      <div>🌞 UV Index: <span id="uv">--</span></div>
     </div>
 
-    <div class="scale-numbers">
-      <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
+    <div class="traffic-updates">
+      <h2>Traffic Updates</h2>
+      <ul id="traffic-list">
+        <li>Loading...</li>
+      </ul>
     </div>
+
+    <div id="last-updated" class="last-updated">Last updated: --</div>
   </div>
 
-  <div class="weather-stats">
-    <div>🌡️ Temperature: 39°C</div>
-    <div>💧 Humidity: 49%</div>
-    <div>🌬️ Wind Speed: 1.3 km/h</div>
-    <div>🌞 UV Index: 0</div>
-  </div>
-
-  <div class="traffic-updates">
-    <h2>Traffic Updates</h2>
-    <ul>
-      <li>Traffic Alert</li>
-      <li>Traffic Alert</li>
-      <li>Traffic Alert</li>
-    </ul>
-  </div>
-
-  <div class="last-updated">Last updated: 11:44:12 AM</div>
-</div>
   <script>
     const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
     const airQualityAPI = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=26.8467&longitude=80.9462&hourly=pm2_5,pm10";
@@ -228,26 +158,23 @@ h1 {
         let status = "", bgColor = "";
 
         if (pm25 <= 50) {
-          status = "Good 😊"; bgColor = "#00e400";
+          status = "Good 😊"; bgColor = "#22c55e";
         } else if (pm25 <= 100) {
-          status = "Moderate 😐"; bgColor = "#ffff00";
+          status = "Moderate 😐"; bgColor = "#facc15";
         } else if (pm25 <= 150) {
-          status = "Sensitive 😷"; bgColor = "#ff7e00";
+          status = "Sensitive 😷"; bgColor = "#fb923c";
         } else if (pm25 <= 200) {
-          status = "Unhealthy 🤢"; bgColor = "#ff0000";
+          status = "Unhealthy 🤢"; bgColor = "#ef4444";
         } else if (pm25 <= 300) {
-          status = "Very Unhealthy 😨"; bgColor = "#8f3f97";
+          status = "Very Unhealthy 😨"; bgColor = "#8b5cf6";
         } else {
-          status = "Hazardous ☠️"; bgColor = "#7e0023";
+          status = "Hazardous ☠️"; bgColor = "#7f1d1d";
         }
 
         aqiStatus.textContent = status;
         aqiStatus.style.backgroundColor = bgColor;
-
-        // Card background slight glow based on AQI
         card.style.boxShadow = `0 0 20px ${bgColor}80`;
 
-        // Update last updated time
         const now = new Date();
         document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
       } catch (error) {
