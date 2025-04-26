@@ -28,125 +28,116 @@
       align-items: center;
       justify-content: center;
     }
+      .container {
+  width: 100%;
+  max-width: 600px;
+  background: #111827;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,255,0,0.5);
+  text-align: center;
+}
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      background: #111827;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
-      animation: fadeSlide 1s ease forwards;
-    }
+h1 {
+  font-size: 1.8rem;
+  color: #60a5fa;
+  margin-bottom: 1rem;
+}
 
-    @keyframes fadeSlide {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
+.aqi-box {
+  background: #1f2937;
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+}
 
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      color: #60a5fa;
-      margin-bottom: 2rem;
-    }
+.aqi-value {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: white;
+}
 
-    .aqi-card {
-      background: #1f2937;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
+.status {
+  display: inline-block;
+  margin: 10px auto;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
 
-    .aqi-card:hover {
-      box-shadow: 0 6px 16px rgba(59,130,246,0.5);
-    }
+.status good {
+  background: #22c55e;
+  color: #fff;
+}
 
-    .aqi-value {
-      font-size: 3rem;
-      font-weight: 700;
-    }
+.pm-info {
+  margin-top: 1rem;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
 
-    .aqi-status {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.3rem 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 0.8rem;
-    }
+.scale-bar {
+  display: flex;
+  margin: 1.5rem 0 0.5rem;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
 
-    .small-info {
-      font-size: 0.9rem;
-      margin-top: 5px;
-      opacity: 0.8;
-    }
+.scale-bar div {
+  flex: 1;
+}
 
-    .scale-bar {
-      display: flex;
-      height: 18px;
-      border-radius: 8px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
+.green { background: #22c55e; }
+.yellow { background: #facc15; }
+.orange { background: #fb923c; }
+.red { background: #ef4444; }
+.purple { background: #8b5cf6; }
+.maroon { background: #7f1d1d; }
 
-    .scale-bar div {
-      flex: 1;
-    }
+.scale-numbers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
 
-    .scale-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-    }
+.weather-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 1.5rem;
+  color: #cbd5e1;
+}
 
-    .info-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+.traffic-updates {
+  background: #1f2937;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+}
 
-    .info-box {
-      flex: 1 1 200px;
-      background: #1f2937;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
+.traffic-updates h2 {
+  font-size: 1.2rem;
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
 
-    .info-box i {
-      margin-right: 6px;
-      color: #60a5fa;
-    }
+.traffic-updates ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: #cbd5e1;
+}
 
-    .traffic-updates {
-      background: #1f2937;
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
+.last-updated {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
 
-    ul {
-      margin-top: 0.5rem;
-      padding-left: 1.5rem;
-    }
-
-    .updated-time {
-      text-align: center;
-      font-size: 0.8rem;
-      margin-top: 1rem;
-      opacity: 0.7;
-    }
-
+     
     /* Responsive */
     @media(max-width: 600px) {
       .info-grid {
@@ -157,46 +148,49 @@
 </head>
 <body>
   <div class="container">
-    <h1>Lucknow Air Quality Index (AQI)</h1>
+    <div class="container">
+  <h1>Lucknow Air Quality Index (AQI)</h1>
 
-    <div class="aqi-card" id="aqi-card">
-      <div class="aqi-value" id="aqi-value">--</div>
-      <div class="aqi-status" id="aqi-status">--</div>
-      <div class="small-info">PM10: <span id="pm10">--</span> µg/m³</div>
-      <div class="small-info">PM2.5: <span id="pm25">--</span> µg/m³</div>
+  <div class="aqi-box">
+    <div class="aqi-value">35.6</div>
+    <div class="status good">Good 😊</div>
+    <div class="pm-info">
+      <p>PM10: 78.5 µg/m³</p>
+      <p>PM2.5: 35.6 µg/m³</p>
     </div>
 
     <div class="scale-bar">
-      <div style="background:#00e400;"></div>
-      <div style="background:#ffff00;"></div>
-      <div style="background:#ff7e00;"></div>
-      <div style="background:#ff0000;"></div>
-      <div style="background:#8f3f97;"></div>
-      <div style="background:#7e0023;"></div>
+      <div class="green"></div>
+      <div class="yellow"></div>
+      <div class="orange"></div>
+      <div class="red"></div>
+      <div class="purple"></div>
+      <div class="maroon"></div>
     </div>
-    <div class="scale-labels">
+
+    <div class="scale-numbers">
       <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
-    </div>
-
-    <div class="info-grid">
-      <div class="info-box"><i class="fas fa-thermometer-half"></i> Temperature: <span id="temperature">--</span>°C</div>
-      <div class="info-box"><i class="fas fa-tint"></i> Humidity: <span id="humidity">--</span>%</div>
-      <div class="info-box"><i class="fas fa-wind"></i> Wind Speed: <span id="wind">--</span> km/h</div>
-      <div class="info-box"><i class="fas fa-sun"></i> UV Index: <span id="uv">--</span></div>
-    </div>
-
-    <div class="traffic-updates">
-      <h2 style="font-size:1.5rem; color:#60a5fa;">Traffic Updates</h2>
-      <ul id="traffic-list">
-        <li>Loading...</li>
-      </ul>
-    </div>
-
-    <div class="updated-time" id="last-updated">
-      Last updated: --
     </div>
   </div>
 
+  <div class="weather-stats">
+    <div>🌡️ Temperature: 39°C</div>
+    <div>💧 Humidity: 49%</div>
+    <div>🌬️ Wind Speed: 1.3 km/h</div>
+    <div>🌞 UV Index: 0</div>
+  </div>
+
+  <div class="traffic-updates">
+    <h2>Traffic Updates</h2>
+    <ul>
+      <li>Traffic Alert</li>
+      <li>Traffic Alert</li>
+      <li>Traffic Alert</li>
+    </ul>
+  </div>
+
+  <div class="last-updated">Last updated: 11:44:12 AM</div>
+</div>
   <script>
     const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
     const airQualityAPI = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=26.8467&longitude=80.9462&hourly=pm2_5,pm10";
