@@ -15,88 +15,59 @@
     }
 
     body {
-      background: linear-gradient(145deg, #0f172a, #1e293b);
+      background: linear-gradient(120deg, #0f172a, #1e293b);
       color: #fff;
-      padding: 2rem;
+      padding: 1rem;
       min-height: 100vh;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      background: #1e293b;
+      background: #0f172a;
       border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 1s ease-out;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       text-align: center;
-      margin-bottom: 2rem;
-      color: #93c5fd;
+      margin-bottom: 1.5rem;
+      color: #60a5fa;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.6);
     }
 
     .aqi-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #111827;
-      border-radius: 12px;
+      background: #1e293b;
+      border-radius: 15px;
       padding: 1.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 0 8px #0ea5e9;
     }
 
     .aqi-value {
-      font-size: 2.5rem;
+      font-size: 3.5rem;
       font-weight: bold;
+      color: #fff;
     }
 
     .aqi-status {
       margin-top: 0.5rem;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       padding: 0.3rem 0.8rem;
       border-radius: 8px;
       font-weight: bold;
-    }
-
-    .weather-box {
-      background: #111827;
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 0.5rem;
-    }
-
-    .traffic-updates {
-      background: #111827;
-      padding: 1rem;
-      border-radius: 12px;
-    }
-
-    .traffic-updates ul {
-      padding-left: 1.5rem;
-      list-style: disc;
+      display: inline-block;
+      margin-bottom: 0.6rem;
     }
 
     #lottie-icon {
-      width: 100px;
-      height: 100px;
-    }
-
-    .aqi-scale {
-      margin-top: 1rem;
+      width: 120px;
+      height: 120px;
     }
 
     .scale-bar {
@@ -104,6 +75,7 @@
       height: 20px;
       border-radius: 10px;
       overflow: hidden;
+      margin-top: 1rem;
     }
 
     .scale-bar div {
@@ -111,10 +83,59 @@
     }
 
     .scale-labels {
-      font-size: 0.8rem;
-      margin-top: 4px;
+      font-size: 0.85rem;
+      margin-top: 6px;
       display: flex;
       justify-content: space-between;
+      padding: 0 2px;
+    }
+
+    .weather-box, .traffic-updates {
+      background: #1e293b;
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .weather-box div {
+      margin-bottom: 0.5rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .row div {
+      flex: 1 1 30%;
+      margin-top: 0.5rem;
+    }
+
+    .traffic-updates h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+      color: #93c5fd;
+    }
+
+    .traffic-updates ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .aqi-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #lottie-icon {
+        margin-top: 1rem;
+      }
+
+      .row {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -132,19 +153,16 @@
       <div id="lottie-icon"></div>
     </div>
 
-    <!-- AQI SCALE BAR -->
-    <div class="aqi-scale">
-      <div class="scale-bar">
-        <div style="background: #00e400;"></div>
-        <div style="background: #ffff00;"></div>
-        <div style="background: #ff7e00;"></div>
-        <div style="background: #ff0000;"></div>
-        <div style="background: #8f3f97;"></div>
-        <div style="background: #7e0023;"></div>
-      </div>
-      <div class="scale-labels">
-        <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
-      </div>
+    <div class="scale-bar">
+      <div style="background: #00e400;"></div>
+      <div style="background: #ffff00;"></div>
+      <div style="background: #ff7e00;"></div>
+      <div style="background: #ff0000;"></div>
+      <div style="background: #8f3f97;"></div>
+      <div style="background: #7e0023;"></div>
+    </div>
+    <div class="scale-labels">
+      <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
     </div>
 
     <div class="weather-box">
@@ -162,7 +180,6 @@
     </div>
   </div>
 
-  <!-- Lottie Animation Script -->
   <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
 
   <script>
@@ -230,7 +247,7 @@
         } else {
           list.innerHTML = incidents
             .slice(0, 3)
-            .map(inc => <li>${inc.properties.eventCode || 'Traffic Alert'}</li>)
+            .map(inc => `<li>${inc.properties.eventCode || 'Traffic Alert'}</li>`)
             .join('');
         }
       } catch (error) {
@@ -239,7 +256,6 @@
       }
     }
 
-    // Lottie Animation Init
     lottie.loadAnimation({
       container: document.getElementById('lottie-icon'),
       renderer: 'svg',
@@ -260,5 +276,3 @@
   </script>
 </body>
 </html>
-
-
