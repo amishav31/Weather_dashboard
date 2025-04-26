@@ -13,8 +13,23 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    /* Background video style */
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+      opacity: 0.3;
+      filter: brightness(0.5) contrast(1.1) saturate(1.2);
+    }
+
     body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #fff;
       padding: 2rem;
       min-height: 100vh;
@@ -22,9 +37,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      transition: background-color 0.5s ease;
     }
-    /* Search bar style */
+
     .search-bar {
       width: 100%;
       max-width: 600px;
@@ -57,7 +71,7 @@
     .container {
       width: 100%;
       max-width: 600px;
-      background: #111827;
+      background: rgba(17, 24, 39, 0.8);
       padding: 2rem;
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(0,255,0,0.5);
@@ -65,25 +79,29 @@
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
+
     h1 {
       font-size: 1.8rem;
       color: #60a5fa;
       margin-bottom: 1rem;
     }
+
     .aqi-box {
-      background: #1f2937;
+      background: rgba(31, 41, 55, 0.8);
       padding: 2rem;
       border-radius: 15px;
       margin-bottom: 1rem;
       opacity: 0;
       animation: fadeIn 1s forwards 0.5s;
     }
+
     .aqi-value {
       font-size: 3.5rem;
       font-weight: bold;
       color: white;
       transition: color 0.5s ease;
     }
+
     .status {
       display: inline-block;
       margin: 10px auto;
@@ -93,11 +111,13 @@
       font-size: 1.1rem;
       transition: background-color 0.5s ease, color 0.5s ease;
     }
+
     .pm-info {
       margin-top: 1rem;
       color: #9ca3af;
       font-size: 0.9rem;
     }
+
     .scale-bar { display: flex; margin: 1.5rem 0 0.5rem; height: 10px; border-radius: 5px; overflow: hidden; }
     .scale-bar div { flex: 1; }
     .green { background: #22c55e; }
@@ -106,27 +126,73 @@
     .red { background: #ef4444; }
     .purple { background: #8b5cf6; }
     .maroon { background: #7f1d1d; }
-    .scale-numbers { display: flex; justify-content: space-between; font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem; }
-    .weather-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 1.5rem; color: #cbd5e1; }
-    .traffic-updates { background: #1f2937; margin-top: 1.5rem; padding: 1rem; border-radius: 10px; opacity: 0; animation: fadeIn 1s forwards 1s; }
-    .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
-    .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
-    .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
+
+    .scale-numbers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.5rem;
+    }
+
+    .weather-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 1.5rem;
+      color: #cbd5e1;
+    }
+
+    .traffic-updates {
+      background: rgba(31, 41, 55, 0.8);
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 10px;
+      opacity: 0;
+      animation: fadeIn 1s forwards 1s;
+    }
+
+    .traffic-updates h2 {
+      font-size: 1.2rem;
+      color: #60a5fa;
+      margin-bottom: 10px;
+    }
+
+    .traffic-updates ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      color: #cbd5e1;
+    }
+
+    .last-updated {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
+
     @media(max-width: 600px) { .info-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
 
-  <!-- Search Bar Section -->
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline class="background-video">
+    <source src="https://drive.google.com/file/d/1U0UyiCeoN4Ql4cnl5-XRMRtWJcauMWFH/view?usp=drive_link.mp4" type="video/mp4">
+    Your browser does not support video tags.
+  </video>
+
+  <!-- Search Bar -->
   <div class="search-bar">
     <input type="text" id="city-input" placeholder="Enter city name...">
     <button onclick="changeCity()">Search</button>
   </div>
 
+  <!-- Dashboard -->
   <div class="container">
     <h1 id="dashboard-title">Lucknow Air Quality Index (AQI)</h1>
 
@@ -139,12 +205,8 @@
       </div>
 
       <div class="scale-bar">
-        <div class="green"></div>
-        <div class="yellow"></div>
-        <div class="orange"></div>
-        <div class="red"></div>
-        <div class="purple"></div>
-        <div class="maroon"></div>
+        <div class="green"></div><div class="yellow"></div><div class="orange"></div>
+        <div class="red"></div><div class="purple"></div><div class="maroon"></div>
       </div>
 
       <div class="scale-numbers">
@@ -161,14 +223,11 @@
 
     <div class="traffic-updates">
       <h2>Traffic Updates</h2>
-      <ul id="traffic-list">
-        <li>Loading...</li>
-      </ul>
+      <ul id="traffic-list"><li>Loading...</li></ul>
     </div>
 
     <div id="last-updated" class="last-updated">Last updated: --</div>
   </div>
-
   <script>
     let latitude = 26.8467;
     let longitude = 80.9462;
