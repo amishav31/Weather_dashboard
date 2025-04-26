@@ -155,7 +155,7 @@
     }
 
     async function fetchAirQuality() {
-  try {
+      try {
     const res = await fetch(airQualityAPI);
     const data = await res.json();
     const pm25 = data.hourly.pm2_5[0];  // PM2.5 value fetch
@@ -198,8 +198,6 @@
     console.error('Air Quality fetch error:', error);
   }
 }
-
-
     async function fetchTraffic() {
       try {
         const res = await fetch(trafficAPI);
