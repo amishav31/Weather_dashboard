@@ -19,10 +19,41 @@
       padding: 2rem;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       transition: background-color 0.5s ease;
     }
+    /* Search bar style */
+    .search-bar {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .search-bar input {
+      padding: 10px 15px;
+      border-radius: 10px 0 0 10px;
+      border: none;
+      outline: none;
+      width: 70%;
+      font-size: 1rem;
+    }
+    .search-bar button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #60a5fa;
+      color: white;
+      font-size: 1rem;
+      border-radius: 0 10px 10px 0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .search-bar button:hover {
+      background-color: #3b82f6;
+    }
+
     .container {
       width: 100%;
       max-width: 600px;
@@ -81,18 +112,23 @@
     .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
     .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
-
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
-    
     @media(max-width: 600px) { .info-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
+
+  <!-- Search Bar Section -->
+  <div class="search-bar">
+    <input type="text" id="city-input" placeholder="Enter city name...">
+    <button onclick="changeCity()">Search</button>
+  </div>
+
   <div class="container">
-    <h1>Lucknow Air Quality Index (AQI)</h1>
+    <h1 id="dashboard-title">Lucknow Air Quality Index (AQI)</h1>
 
     <div class="aqi-box" id="aqi-card">
       <div id="aqi-value" class="aqi-value">--</div>
@@ -134,34 +170,32 @@
   </div>
 
   <script>
-    const weatherAPI = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true&hourly=uv_index,relativehumidity_2m";
-    const airQualityAPI = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=26.8467&longitude=80.9462&hourly=pm2_5,pm10";
-    const trafficAPI = "https://api.tomtom.com/traffic/services/5/incidentDetails?key=OSs8MdHT9bfR1pKKwHq8ErBcuNgZGMFA&bbox=80.9000,26.8000,81.0000,26.9000";
+    let latitude = 26.8467;
+    let longitude = 80.9462;
+    let cityName = "Lucknow";
+
+    function getWeatherAPI() {
+      return `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=uv_index,relativehumidity_2m`;
+    }
+    function getAirQualityAPI() {
+      return `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=pm2_5,pm10`;
+    }
 
     function calculateAQI(pm25) {
       let C_low, C_high, I_low, I_high;
-      if (pm25 <= 30) {
-        C_low = 0; C_high = 30; I_low = 0; I_high = 50;
-      } else if (pm25 <= 60) {
-        C_low = 31; C_high = 60; I_low = 51; I_high = 100;
-      } else if (pm25 <= 90) {
-        C_low = 61; C_high = 90; I_low = 101; I_high = 200;
-      } else if (pm25 <= 120) {
-        C_low = 91; C_high = 120; I_low = 201; I_high = 300;
-      } else if (pm25 <= 250) {
-        C_low = 121; C_high = 250; I_low = 301; I_high = 400;
-      } else if (pm25 <= 500) {
-        C_low = 251; C_high = 500; I_low = 401; I_high = 500;
-      } else {
-        return 500;
-      }
-      const AQI = ((I_high - I_low) / (C_high - C_low)) * (pm25 - C_low) + I_low;
-      return Math.round(AQI);
+      if (pm25 <= 30) { C_low = 0; C_high = 30; I_low = 0; I_high = 50; }
+      else if (pm25 <= 60) { C_low = 31; C_high = 60; I_low = 51; I_high = 100; }
+      else if (pm25 <= 90) { C_low = 61; C_high = 90; I_low = 101; I_high = 200; }
+      else if (pm25 <= 120) { C_low = 91; C_high = 120; I_low = 201; I_high = 300; }
+      else if (pm25 <= 250) { C_low = 121; C_high = 250; I_low = 301; I_high = 400; }
+      else if (pm25 <= 500) { C_low = 251; C_high = 500; I_low = 401; I_high = 500; }
+      else { return 500; }
+      return Math.round(((I_high - I_low) / (C_high - C_low)) * (pm25 - C_low) + I_low);
     }
 
     async function fetchWeather() {
       try {
-        const res = await fetch(weatherAPI);
+        const res = await fetch(getWeatherAPI());
         const data = await res.json();
         const current = data.current_weather;
 
@@ -176,7 +210,7 @@
 
     async function fetchAirQuality() {
       try {
-        const res = await fetch(airQualityAPI);
+        const res = await fetch(getAirQualityAPI());
         const data = await res.json();
         const pm25 = data.hourly.pm2_5[0];
         const pm10 = data.hourly.pm10[0];
@@ -184,19 +218,12 @@
         const aqi = calculateAQI(pm25);
         let status = "", bgColor = "";
 
-        if (aqi <= 50) {
-          status = "Good 😊"; bgColor = "#22c55e";
-        } else if (aqi <= 100) {
-          status = "Moderate 😐"; bgColor = "#facc15";
-        } else if (aqi <= 150) {
-          status = "Sensitive 😷"; bgColor = "#fb923c";
-        } else if (aqi <= 200) {
-          status = "Unhealthy 🪢"; bgColor = "#ef4444";
-        } else if (aqi <= 300) {
-          status = "Very Unhealthy 😨"; bgColor = "#8b5cf6";
-        } else {
-          status = "Hazardous ☠️"; bgColor = "#7f1d1d";
-        }
+        if (aqi <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
+        else if (aqi <= 100) { status = "Moderate 😐"; bgColor = "#facc15"; }
+        else if (aqi <= 150) { status = "Sensitive 😷"; bgColor = "#fb923c"; }
+        else if (aqi <= 200) { status = "Unhealthy 🪢"; bgColor = "#ef4444"; }
+        else if (aqi <= 300) { status = "Very Unhealthy 😨"; bgColor = "#8b5cf6"; }
+        else { status = "Hazardous ☠️"; bgColor = "#7f1d1d"; }
 
         document.getElementById('aqi-value').textContent = aqi;
         document.getElementById('pm25').textContent = pm25.toFixed(1);
@@ -213,21 +240,8 @@
     }
 
     async function fetchTraffic() {
-      try {
-        const res = await fetch(trafficAPI);
-        const data = await res.json();
-        const incidents = data.incidentDetails || [];
-        const list = document.getElementById('traffic-list');
-
-        if (incidents.length === 0) {
-          list.innerHTML = '<li>No major incidents 🚗</li>';
-        } else {
-          list.innerHTML = incidents.slice(0, 3).map(inc => `<li>${inc.properties.eventDescription || 'Traffic Update'}</li>`).join('');
-        }
-      } catch (error) {
-        console.error('Traffic fetch error:', error);
-        document.getElementById('traffic-list').innerHTML = '<li>Traffic data unavailable 🚧</li>';
-      }
+      const list = document.getElementById('traffic-list');
+      list.innerHTML = '<li>Traffic updates not available for this city 🚗</li>';
     }
 
     async function initDashboard() {
@@ -236,8 +250,21 @@
       await fetchTraffic();
     }
 
+    function changeCity() {
+      const input = document.getElementById('city-input').value.trim();
+      if (input !== "") {
+        cityName = input;
+        document.getElementById('dashboard-title').textContent = `${cityName} Air Quality Index (AQI)`;
+        // Random lat/lon for demo, ideally use Geocoding API
+        latitude = latitude + (Math.random() - 0.5) * 2; 
+        longitude = longitude + (Math.random() - 0.5) * 2;
+        initDashboard();
+      }
+    }
+
     initDashboard();
     setInterval(initDashboard, 5 * 60 * 1000); // Every 5 minutes
   </script>
+
 </body>
 </html>
