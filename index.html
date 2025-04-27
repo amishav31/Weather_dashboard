@@ -133,49 +133,20 @@
 </div>
 
 <script>
-  let latitude = 26.8467;
-  let longitude = 80.9462;
   let cityName = "Lucknow";
-
-  function getWeatherAPI() {
-    return `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=uv_index,relativehumidity_2m`;
-  }
-  function getAirQualityAPI() {
-    return `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=pm2_5,pm10`;
-  }
-
-  function calculateAQI(pm25) {
-    let C_low, C_high, I_low, I_high;
-    if (pm25 <= 30) { C_low = 0; C_high = 30; I_low = 0; I_high = 50; }
-    else if (pm25 <= 60) { C_low = 31; C_high = 60; I_low = 51; I_high = 100; }
-    else if (pm25 <= 90) { C_low = 61; C_high = 90; I_low = 101; I_high = 200; }
-    else if (pm25 <= 120) { C_low = 91; C_high = 120; I_low = 201; I_high = 300; }
-    else if (pm25 <= 250) { C_low = 121; C_high = 250; I_low = 301; I_high = 400; }
-    else { C_low = 251; C_high = 500; I_low = 401; I_high = 500; }
-    return Math.round(((I_high - I_low) / (C_high - C_low)) * (pm25 - C_low) + I_low);
-  }
-
-  async function fetchWeather() {
-    try {
-      const res = await fetch(getWeatherAPI());
-      const data = await res.json();
-      const current = data.current_weather;
-      document.getElementById('temperature').textContent = current.temperature;
-      document.getElementById('wind').textContent = current.windspeed;
-      document.getElementById('humidity').textContent = data.hourly.relativehumidity_2m[0];
-      document.getElementById('uv').textContent = data.hourly.uv_index[0];
-    } catch (error) {
-      console.error('Weather fetch error:', error);
-    }
-  }
 
   async function fetchAirQuality() {
     try {
-      const res = await fetch(getAirQualityAPI());
+      const res = await fetch(`https://api.waqi.info/feed/${cityName}/?token=5e9fe29ab94a25e359677d0aa8456fb820c34e3b`);
       const data = await res.json();
-      const pm25 = data.hourly.pm2_5[0];
-      const pm10 = data.hourly.pm10[0];
-      const aqi = calculateAQI(pm25);
+      
+      if (data.status !== "ok") {
+        throw new Error("Invalid response from API");
+      }
+
+      const aqi = data.data.aqi;
+      const pm25 = data.data.iaqi.pm25 ? data.data.iaqi.pm25.v : "--";
+      const pm10 = data.data.iaqi.pm10 ? data.data.iaqi.pm10.v : "--";
       let status = "", bgColor = "";
 
       if (aqi <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
@@ -186,56 +157,88 @@
       else { status = "Hazardous ☠️"; bgColor = "#7f1d1d"; }
 
       document.getElementById('aqi-value').textContent = aqi;
-      document.getElementById('pm25').textContent = pm25.toFixed(1);
-      document.getElementById('pm10').textContent = pm10.toFixed(1);
+      document.getElementById('pm25').textContent = pm25;
+      document.getElementById('pm10').textContent = pm10;
       document.getElementById('aqi-status').textContent = status;
       document.getElementById('aqi-status').style.backgroundColor = bgColor;
       document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
 
-      const now = new Date();
-      document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
     } catch (error) {
       console.error('Air Quality fetch error:', error);
+      document.getElementById('aqi-value').textContent = "--";
+      document.getElementById('pm25').textContent = "--";
+      document.getElementById('pm10').textContent = "--";
+      document.getElementById('aqi-status').textContent = "Error ❌";
+      document.getElementById('aqi-status').style.backgroundColor = "#9ca3af"; // grey
+      document.getElementById('aqi-card').style.boxShadow = "none";
+    }
+  }
+
+  async function fetchWeather() {
+    try {
+      const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
+      const weatherRes = await fetch(weatherApi);
+      const weatherData = await weatherRes.json();
+      const temp = weatherData.current_weather.temperature;
+      const wind = weatherData.current_weather.windspeed;
+      const humidity = Math.floor(Math.random() * 50) + 30; // Dummy humidity
+      const uvIndex = Math.floor(Math.random() * 11); // Dummy UV index
+
+      document.getElementById('weather').innerHTML = `
+        🌡️ Temperature: ${temp}°C<br>
+        💧 Humidity: ${humidity}%<br>
+        🌬️ Wind Speed: ${wind} km/h<br>
+        ☀️ UV Index: ${uvIndex}
+      `;
+    } catch (error) {
+      console.error('Weather fetch error:', error);
     }
   }
 
   async function fetchTraffic() {
-    document.getElementById('traffic-list').innerHTML = '<li>Traffic updates not available 🚗</li>';
-  }
-
-  async function geocodeCity(city) {
     try {
-      const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
-      const data = await res.json();
-      if (data.results && data.results.length > 0) {
-        latitude = data.results[0].latitude;
-        longitude = data.results[0].longitude;
+      const trafficApi = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point=26.8467,80.9462&key=YOUR_TOMTOM_API_KEY_HERE`;
+      const trafficRes = await fetch(trafficApi);
+      const trafficData = await trafficRes.json();
+
+      if (trafficData && trafficData.flowSegmentData) {
+        const speed = trafficData.flowSegmentData.currentSpeed;
+        const freeFlowSpeed = trafficData.flowSegmentData.freeFlowSpeed;
+        const congestion = ((1 - speed / freeFlowSpeed) * 100).toFixed(1);
+
+        document.getElementById('trafficUpdates').innerHTML = `
+          <li>Current Speed: ${speed} km/h</li>
+          <li>Free Flow Speed: ${freeFlowSpeed} km/h</li>
+          <li>Congestion Level: ${congestion}% 🚗</li>
+        `;
+      } else {
+        document.getElementById('trafficUpdates').innerHTML = `
+          <li>Traffic updates not available 🚗</li>
+        `;
       }
     } catch (error) {
-      console.error('Geocoding error:', error);
+      console.error('Traffic fetch error:', error);
+      document.getElementById('trafficUpdates').innerHTML = `
+        <li>Traffic updates not available 🚗</li>
+      `;
     }
   }
 
-  async function initDashboard() {
-    await fetchWeather();
+  async function fetchAllData() {
+    const cityInput = document.getElementById('cityInput').value.trim();
+    cityName = cityInput !== "" ? cityInput : "Lucknow";
+    document.getElementById('cityName').innerText = `${cityName} Air Quality Index (AQI)`;
+
     await fetchAirQuality();
+    await fetchWeather();
     await fetchTraffic();
-  }
 
-  async function changeCity() {
-    const input = document.getElementById('city-input').value.trim();
-    if (input !== "") {
-      cityName = input;
-      document.getElementById('dashboard-title').textContent = `${cityName} Air Quality Index (AQI)`;
-      await geocodeCity(cityName);
-      initDashboard();
-    }
+    const now = new Date();
+    document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
   }
-
   initDashboard();
   setInterval(initDashboard, 5 * 60 * 1000); // Update every 5 min
 </script>
 
 </body>
 </html>
-
