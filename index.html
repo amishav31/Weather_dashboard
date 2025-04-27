@@ -136,41 +136,45 @@
   let cityName = "Lucknow";
 
   async function fetchAirQuality() {
-    try {
-      const res = await fetch(`https://api.waqi.info/feed/${cityName}/?token=5e9fe29ab94a25e359677d0aa8456fb820c34e3b`);
-      const data = await res.json();
-      
-      if (data.status !== "ok") throw new Error("Invalid response from API");
+  try {
+    const apiKey = "f6ffdea523e6467df28c2001475050bb";
+    const lat = 26.8467; // Lucknow latitude
+    const lon = 80.9462; // Lucknow longitude
 
-      const aqi = data.data.aqi;
-      const pm25 = data.data.iaqi.pm25 ? data.data.iaqi.pm25.v : "--";
-      const pm10 = data.data.iaqi.pm10 ? data.data.iaqi.pm10.v : "--";
-      let status = "", bgColor = "";
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+    const data = await res.json();
 
-      if (aqi <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
-      else if (aqi <= 100) { status = "Moderate 😐"; bgColor = "#facc15"; }
-      else if (aqi <= 150) { status = "Sensitive 😷"; bgColor = "#fb923c"; }
-      else if (aqi <= 200) { status = "Unhealthy 🪢"; bgColor = "#ef4444"; }
-      else if (aqi <= 300) { status = "Very Unhealthy 😨"; bgColor = "#8b5cf6"; }
-      else { status = "Hazardous ☠️"; bgColor = "#7f1d1d"; }
+    const aqi = data.list[0].main.aqi;
+    const pm25 = data.list[0].components.pm2_5;
+    const pm10 = data.list[0].components.pm10;
 
-      document.getElementById('aqi-value').textContent = aqi;
-      document.getElementById('pm25').textContent = pm25;
-      document.getElementById('pm10').textContent = pm10;
-      document.getElementById('aqi-status').textContent = status;
-      document.getElementById('aqi-status').style.backgroundColor = bgColor;
-      document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+    let status = "", bgColor = "";
 
-    } catch (error) {
-      console.error('Air Quality fetch error:', error);
-      document.getElementById('aqi-value').textContent = "--";
-      document.getElementById('pm25').textContent = "--";
-      document.getElementById('pm10').textContent = "--";
-      document.getElementById('aqi-status').textContent = "Error ❌";
-      document.getElementById('aqi-status').style.backgroundColor = "#9ca3af";
-      document.getElementById('aqi-card').style.boxShadow = "none";
-    }
+    if (aqi == 1) { status = "Good 😊"; bgColor = "#22c55e"; }
+    else if (aqi == 2) { status = "Fair 🙂"; bgColor = "#84cc16"; }
+    else if (aqi == 3) { status = "Moderate 😐"; bgColor = "#facc15"; }
+    else if (aqi == 4) { status = "Poor 😷"; bgColor = "#fb923c"; }
+    else if (aqi == 5) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
+    else { status = "Unknown ❓"; bgColor = "#9ca3af"; }
+
+    document.getElementById('aqi-value').textContent = aqi;
+    document.getElementById('pm25').textContent = pm25 ? pm25.toFixed(1) : "--";
+    document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
+    document.getElementById('aqi-status').textContent = status;
+    document.getElementById('aqi-status').style.backgroundColor = bgColor;
+    document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+
+  } catch (error) {
+    console.error('Air Quality fetch error:', error);
+    document.getElementById('aqi-value').textContent = "--";
+    document.getElementById('pm25').textContent = "--";
+    document.getElementById('pm10').textContent = "--";
+    document.getElementById('aqi-status').textContent = "Error ❌";
+    document.getElementById('aqi-status').style.backgroundColor = "#9ca3af";
+    document.getElementById('aqi-card').style.boxShadow = "none";
   }
+}
+
 
   async function fetchWeather() {
     try {
