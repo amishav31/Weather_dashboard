@@ -12,7 +12,6 @@
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
   <style>
-    /* -------- Styles Same As Yours -------- */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     .background-video {
       position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%;
@@ -24,18 +23,6 @@
       color: #fff; padding: 2rem; min-height: 100vh;
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     }
-    .search-bar {
-      width: 100%; max-width: 600px; margin-bottom: 20px; display: flex; justify-content: center;
-    }
-    .search-bar input {
-      padding: 10px 15px; border-radius: 10px 0 0 10px;
-      border: none; outline: none; width: 70%; font-size: 1rem;
-    }
-    .search-bar button {
-      padding: 10px 15px; border: none; background-color: #60a5fa; color: white;
-      font-size: 1rem; border-radius: 0 10px 10px 0; cursor: pointer; transition: background-color 0.3s;
-    }
-    .search-bar button:hover { background-color: #3b82f6; }
     .container {
       width: 100%; max-width: 600px; background: rgba(17,24,39,0.8); padding: 2rem;
       border-radius: 20px; box-shadow: 0 0 20px rgba(0,255,0,0.5); text-align: center;
@@ -77,7 +64,6 @@
     .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-    @media(max-width: 600px) { .info-grid { flex-direction: column; } }
   </style>
 </head>
 
@@ -88,12 +74,6 @@
   <source src="https://github.com/amishav31/Cloud_DISPLAY/raw/refs/heads/main/5339802-hd_1920_1080_30fps.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-
-<!-- Search Bar -->
-<div class="search-bar">
-  <input type="text" id="city-input" placeholder="Enter city name...">
-  <button onclick="changeCity()">Search</button>
-</div>
 
 <!-- Dashboard -->
 <div class="container">
@@ -133,13 +113,11 @@
 </div>
 
 <script>
-  let cityName = "Lucknow";
-
-  async function fetchAirQuality() {
+async function fetchAirQuality() {
   try {
     const apiKey = "f6ffdea523e6467df28c2001475050bb";
-    const lat = 26.8467; // Lucknow latitude
-    const lon = 80.9462; // Lucknow longitude
+    const lat = 26.8467;
+    const lon = 80.9462;
 
     const res = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
     const data = await res.json();
@@ -147,7 +125,6 @@
     const pm25 = data.list[0].components.pm2_5;
     const pm10 = data.list[0].components.pm10;
 
-    // Indian AQI calculation
     const aqiIndian = calculateIndianAQI(pm25, pm10);
 
     let status = "", bgColor = "";
@@ -168,21 +145,12 @@
 
   } catch (error) {
     console.error('Air Quality fetch error:', error);
-    document.getElementById('aqi-value').textContent = "--";
-    document.getElementById('pm25').textContent = "--";
-    document.getElementById('pm10').textContent = "--";
-    document.getElementById('aqi-status').textContent = "Error ❌";
-    document.getElementById('aqi-status').style.backgroundColor = "#9ca3af";
-    document.getElementById('aqi-card').style.boxShadow = "none";
   }
 }
 
-// Ye function bhi add karna top me:
 function calculateIndianAQI(pm25, pm10) {
-  let aqiPm25 = 0;
-  let aqiPm10 = 0;
+  let aqiPm25 = 0, aqiPm10 = 0;
 
-  // PM2.5 based AQI
   if (pm25 <= 30) aqiPm25 = 50;
   else if (pm25 <= 60) aqiPm25 = 100;
   else if (pm25 <= 90) aqiPm25 = 200;
@@ -190,7 +158,6 @@ function calculateIndianAQI(pm25, pm10) {
   else if (pm25 <= 250) aqiPm25 = 400;
   else aqiPm25 = 500;
 
-  // PM10 based AQI
   if (pm10 <= 50) aqiPm10 = 50;
   else if (pm10 <= 100) aqiPm10 = 100;
   else if (pm10 <= 250) aqiPm10 = 200;
@@ -198,67 +165,54 @@ function calculateIndianAQI(pm25, pm10) {
   else if (pm10 <= 430) aqiPm10 = 400;
   else aqiPm10 = 500;
 
-  // Final AQI = maximum of both
   return Math.max(aqiPm25, aqiPm10);
 }
+
+async function fetchWeather() {
+  try {
+    const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
+    const weatherRes = await fetch(weatherApi);
+    const weatherData = await weatherRes.json();
+    const temp = weatherData.current_weather.temperature;
+    const wind = weatherData.current_weather.windspeed;
+    const humidity = Math.floor(Math.random() * 50) + 30;
+    const uvIndex = Math.floor(Math.random() * 11);
+
+    document.getElementById('temperature').textContent = temp;
+    document.getElementById('humidity').textContent = humidity;
+    document.getElementById('wind').textContent = wind;
+    document.getElementById('uv').textContent = uvIndex;
+  } catch (error) {
+    console.error('Weather fetch error:', error);
+  }
 }
 
-
-  async function fetchWeather() {
-    try {
-      const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
-      const weatherRes = await fetch(weatherApi);
-      const weatherData = await weatherRes.json();
-      const temp = weatherData.current_weather.temperature;
-      const wind = weatherData.current_weather.windspeed;
-      const humidity = Math.floor(Math.random() * 50) + 30;
-      const uvIndex = Math.floor(Math.random() * 11);
-
-      document.getElementById('temperature').textContent = temp;
-      document.getElementById('humidity').textContent = humidity;
-      document.getElementById('wind').textContent = wind;
-      document.getElementById('uv').textContent = uvIndex;
-    } catch (error) {
-      console.error('Weather fetch error:', error);
-    }
+async function fetchTraffic() {
+  try {
+    document.getElementById('traffic-list').innerHTML = `
+      <li>Current Speed: 35 km/h</li>
+      <li>Free Flow Speed: 50 km/h</li>
+      <li>Congestion Level: 30% 🚗</li>
+    `;
+  } catch (error) {
+    console.error('Traffic fetch error:', error);
   }
+}
 
-  async function fetchTraffic() {
-    try {
-      // Dummy Traffic Data because no API KEY
-      document.getElementById('traffic-list').innerHTML = `
-        <li>Current Speed: 35 km/h</li>
-        <li>Free Flow Speed: 50 km/h</li>
-        <li>Congestion Level: 30% 🚗</li>
-      `;
-    } catch (error) {
-      console.error('Traffic fetch error:', error);
-      document.getElementById('traffic-list').innerHTML = `
-        <li>Traffic updates not available 🚗</li>
-      `;
-    }
-  }
+async function fetchAllData() {
+  await fetchAirQuality();
+  await fetchWeather();
+  await fetchTraffic();
 
-  async function fetchAllData() {
-    const cityInput = document.getElementById('city-input').value.trim();
-    cityName = cityInput !== "" ? cityInput : "Lucknow";
-    document.getElementById('dashboard-title').innerText = `${cityName} Air Quality Index (AQI)`;
+  const now = new Date();
+  document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
+}
 
-    await fetchAirQuality();
-    await fetchWeather();
-    await fetchTraffic();
-
-    const now = new Date();
-    document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
-  }
-
-  function changeCity() {
-    fetchAllData();
-  }
-
-  // Initial Call
-  fetchAllData();
-  setInterval(fetchAllData, 5 * 60 * 1000); // Update every 5 min
+// Initial Load
+fetchAllData();
+setInterval(fetchAllData, 5 * 60 * 1000); // Refresh every 5 min
 </script>
+
 </body>
 </html>
+
