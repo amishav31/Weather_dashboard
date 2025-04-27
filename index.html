@@ -144,20 +144,22 @@
     const res = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
     const data = await res.json();
 
-    const aqi = data.list[0].main.aqi;
     const pm25 = data.list[0].components.pm2_5;
     const pm10 = data.list[0].components.pm10;
 
+    // Indian AQI calculation
+    const aqiIndian = calculateIndianAQI(pm25, pm10);
+
     let status = "", bgColor = "";
 
-    if (aqi == 1) { status = "Good 😊"; bgColor = "#22c55e"; }
-    else if (aqi == 2) { status = "Fair 🙂"; bgColor = "#84cc16"; }
-    else if (aqi == 3) { status = "Moderate 😐"; bgColor = "#facc15"; }
-    else if (aqi == 4) { status = "Poor 😷"; bgColor = "#fb923c"; }
-    else if (aqi == 5) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
-    else { status = "Unknown ❓"; bgColor = "#9ca3af"; }
+    if (aqiIndian <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
+    else if (aqiIndian <= 100) { status = "Satisfactory 🙂"; bgColor = "#84cc16"; }
+    else if (aqiIndian <= 200) { status = "Moderate 😐"; bgColor = "#facc15"; }
+    else if (aqiIndian <= 300) { status = "Poor 😷"; bgColor = "#fb923c"; }
+    else if (aqiIndian <= 400) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
+    else { status = "Severe 🚨"; bgColor = "#7f1d1d"; }
 
-    document.getElementById('aqi-value').textContent = aqi;
+    document.getElementById('aqi-value').textContent = aqiIndian;
     document.getElementById('pm25').textContent = pm25 ? pm25.toFixed(1) : "--";
     document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
     document.getElementById('aqi-status').textContent = status;
@@ -173,6 +175,32 @@
     document.getElementById('aqi-status').style.backgroundColor = "#9ca3af";
     document.getElementById('aqi-card').style.boxShadow = "none";
   }
+}
+
+// Ye function bhi add karna top me:
+function calculateIndianAQI(pm25, pm10) {
+  let aqiPm25 = 0;
+  let aqiPm10 = 0;
+
+  // PM2.5 based AQI
+  if (pm25 <= 30) aqiPm25 = 50;
+  else if (pm25 <= 60) aqiPm25 = 100;
+  else if (pm25 <= 90) aqiPm25 = 200;
+  else if (pm25 <= 120) aqiPm25 = 300;
+  else if (pm25 <= 250) aqiPm25 = 400;
+  else aqiPm25 = 500;
+
+  // PM10 based AQI
+  if (pm10 <= 50) aqiPm10 = 50;
+  else if (pm10 <= 100) aqiPm10 = 100;
+  else if (pm10 <= 250) aqiPm10 = 200;
+  else if (pm10 <= 350) aqiPm10 = 300;
+  else if (pm10 <= 430) aqiPm10 = 400;
+  else aqiPm10 = 500;
+
+  // Final AQI = maximum of both
+  return Math.max(aqiPm25, aqiPm10);
+}
 }
 
 
