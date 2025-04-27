@@ -140,9 +140,7 @@
       const res = await fetch(`https://api.waqi.info/feed/${cityName}/?token=5e9fe29ab94a25e359677d0aa8456fb820c34e3b`);
       const data = await res.json();
       
-      if (data.status !== "ok") {
-        throw new Error("Invalid response from API");
-      }
+      if (data.status !== "ok") throw new Error("Invalid response from API");
 
       const aqi = data.data.aqi;
       const pm25 = data.data.iaqi.pm25 ? data.data.iaqi.pm25.v : "--";
@@ -169,7 +167,7 @@
       document.getElementById('pm25').textContent = "--";
       document.getElementById('pm10').textContent = "--";
       document.getElementById('aqi-status').textContent = "Error ❌";
-      document.getElementById('aqi-status').style.backgroundColor = "#9ca3af"; // grey
+      document.getElementById('aqi-status').style.backgroundColor = "#9ca3af";
       document.getElementById('aqi-card').style.boxShadow = "none";
     }
   }
@@ -181,15 +179,13 @@
       const weatherData = await weatherRes.json();
       const temp = weatherData.current_weather.temperature;
       const wind = weatherData.current_weather.windspeed;
-      const humidity = Math.floor(Math.random() * 50) + 30; // Dummy humidity
-      const uvIndex = Math.floor(Math.random() * 11); // Dummy UV index
+      const humidity = Math.floor(Math.random() * 50) + 30;
+      const uvIndex = Math.floor(Math.random() * 11);
 
-      document.getElementById('weather').innerHTML = `
-        🌡️ Temperature: ${temp}°C<br>
-        💧 Humidity: ${humidity}%<br>
-        🌬️ Wind Speed: ${wind} km/h<br>
-        ☀️ UV Index: ${uvIndex}
-      `;
+      document.getElementById('temperature').textContent = temp;
+      document.getElementById('humidity').textContent = humidity;
+      document.getElementById('wind').textContent = wind;
+      document.getElementById('uv').textContent = uvIndex;
     } catch (error) {
       console.error('Weather fetch error:', error);
     }
@@ -197,37 +193,24 @@
 
   async function fetchTraffic() {
     try {
-      const trafficApi = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point=26.8467,80.9462&key=YOUR_TOMTOM_API_KEY_HERE`;
-      const trafficRes = await fetch(trafficApi);
-      const trafficData = await trafficRes.json();
-
-      if (trafficData && trafficData.flowSegmentData) {
-        const speed = trafficData.flowSegmentData.currentSpeed;
-        const freeFlowSpeed = trafficData.flowSegmentData.freeFlowSpeed;
-        const congestion = ((1 - speed / freeFlowSpeed) * 100).toFixed(1);
-
-        document.getElementById('trafficUpdates').innerHTML = `
-          <li>Current Speed: ${speed} km/h</li>
-          <li>Free Flow Speed: ${freeFlowSpeed} km/h</li>
-          <li>Congestion Level: ${congestion}% 🚗</li>
-        `;
-      } else {
-        document.getElementById('trafficUpdates').innerHTML = `
-          <li>Traffic updates not available 🚗</li>
-        `;
-      }
+      // Dummy Traffic Data because no API KEY
+      document.getElementById('traffic-list').innerHTML = `
+        <li>Current Speed: 35 km/h</li>
+        <li>Free Flow Speed: 50 km/h</li>
+        <li>Congestion Level: 30% 🚗</li>
+      `;
     } catch (error) {
       console.error('Traffic fetch error:', error);
-      document.getElementById('trafficUpdates').innerHTML = `
+      document.getElementById('traffic-list').innerHTML = `
         <li>Traffic updates not available 🚗</li>
       `;
     }
   }
 
   async function fetchAllData() {
-    const cityInput = document.getElementById('cityInput').value.trim();
+    const cityInput = document.getElementById('city-input').value.trim();
     cityName = cityInput !== "" ? cityInput : "Lucknow";
-    document.getElementById('cityName').innerText = `${cityName} Air Quality Index (AQI)`;
+    document.getElementById('dashboard-title').innerText = `${cityName} Air Quality Index (AQI)`;
 
     await fetchAirQuality();
     await fetchWeather();
@@ -236,9 +219,14 @@
     const now = new Date();
     document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
   }
-  initDashboard();
-  setInterval(initDashboard, 5 * 60 * 1000); // Update every 5 min
-</script>
 
+  function changeCity() {
+    fetchAllData();
+  }
+
+  // Initial Call
+  fetchAllData();
+  setInterval(fetchAllData, 5 * 60 * 1000); // Update every 5 min
+</script>
 </body>
 </html>
