@@ -115,28 +115,30 @@
 <script>
 async function fetchAirQuality() {
   try {
-    const apiKey = "f6ffdea523e6467df28c2001475050bb";
-    const lat = 26.8467;
-    const lon = 80.9462;
+    const token = "5e9fe29ab94a25e359677d0aa8456fb820c34e3b";
+    const city = "Lucknow"; // You can change this to any city like 'Delhi', 'Mumbai', etc.
 
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+    const res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
     const data = await res.json();
 
-    const pm25 = data.list[0].components.pm2_5;
-    const pm10 = data.list[0].components.pm10;
+    if (data.status !== "ok") {
+      throw new Error("Failed to fetch AQI data");
+    }
 
-    const aqiIndian = calculateIndianAQI(pm25, pm10);
+    const aqi = data.data.aqi;
+    const pm25 = data.data.iaqi.pm25?.v || null;
+    const pm10 = data.data.iaqi.pm10?.v || null;
 
     let status = "", bgColor = "";
 
-    if (aqiIndian <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
-    else if (aqiIndian <= 100) { status = "Satisfactory 🙂"; bgColor = "#84cc16"; }
-    else if (aqiIndian <= 200) { status = "Moderate 😐"; bgColor = "#facc15"; }
-    else if (aqiIndian <= 300) { status = "Poor 😷"; bgColor = "#fb923c"; }
-    else if (aqiIndian <= 400) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
+    if (aqi <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
+    else if (aqi <= 100) { status = "Satisfactory 🙂"; bgColor = "#84cc16"; }
+    else if (aqi <= 200) { status = "Moderate 😐"; bgColor = "#facc15"; }
+    else if (aqi <= 300) { status = "Poor 😷"; bgColor = "#fb923c"; }
+    else if (aqi <= 400) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
     else { status = "Severe 🚨"; bgColor = "#7f1d1d"; }
 
-    document.getElementById('aqi-value').textContent = aqiIndian;
+    document.getElementById('aqi-value').textContent = aqi;
     document.getElementById('pm25').textContent = pm25 ? pm25.toFixed(1) : "--";
     document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
     document.getElementById('aqi-status').textContent = status;
@@ -145,29 +147,10 @@ async function fetchAirQuality() {
 
   } catch (error) {
     console.error('Air Quality fetch error:', error);
+    document.getElementById('aqi-status').textContent = "Error fetching AQI";
   }
 }
-
-function calculateIndianAQI(pm25, pm10) {
-  let aqiPm25 = 0, aqiPm10 = 0;
-
-  if (pm25 <= 30) aqiPm25 = 50;
-  else if (pm25 <= 60) aqiPm25 = 100;
-  else if (pm25 <= 90) aqiPm25 = 200;
-  else if (pm25 <= 120) aqiPm25 = 300;
-  else if (pm25 <= 250) aqiPm25 = 400;
-  else aqiPm25 = 500;
-
-  if (pm10 <= 50) aqiPm10 = 50;
-  else if (pm10 <= 100) aqiPm10 = 100;
-  else if (pm10 <= 250) aqiPm10 = 200;
-  else if (pm10 <= 350) aqiPm10 = 300;
-  else if (pm10 <= 430) aqiPm10 = 400;
-  else aqiPm10 = 500;
-
-  return Math.max(aqiPm25, aqiPm10);
-}
-
+fetchAirQuality();
 async function fetchWeather() {
   try {
     const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
