@@ -2,132 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lucknow AQI Dashboard</title>
+  <meta name="viewport" content="width=256, height=192, user-scalable=no" />
+  <title>256x192 AQI Dashboard</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    .background-video {
-      position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%;
-      width: auto; height: auto; z-index: -1;
-      object-fit: cover; opacity: 0.3;
-      filter: brightness(0.5) contrast(1.1) saturate(1.2);
-    }
+
     body {
-      color: #fff; padding: 2rem; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      width: 256px;
+      height: 192px;
+      overflow: hidden;
+      background-color: black;
+      margin: 0 auto;
     }
-    .container {
-      width: 100%; max-width: 600px; background: rgba(17,24,39,0.8); padding: 2rem;
-      border-radius: 20px; box-shadow: 0 0 20px rgba(0,255,0,0.5); text-align: center;
-      opacity: 0; animation: fadeIn 1s forwards;
+
+    .screen {
+      width: 256px;
+      height: 192px;
+      background-color: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 8px;
+      padding: 4px;
     }
-    h1 { font-size: 1.8rem; color: #60a5fa; margin-bottom: 1rem; }
+
+    h1 {
+      font-size: 10px;
+      color: #60a5fa;
+      text-align: center;
+    }
+
     .aqi-box {
-      background: rgba(31,41,55,0.8); padding: 2rem; border-radius: 15px;
-      margin-bottom: 1rem; opacity: 0; animation: fadeIn 1s forwards 0.5s;
+      margin-top: 4px;
+      background: #222;
+      padding: 4px;
+      border-radius: 6px;
+      text-align: center;
+      width: 100%;
     }
-    .aqi-value { font-size: 3.5rem; font-weight: bold; color: white; transition: color 0.5s ease; }
+
+    .aqi-value {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     .status {
-      display: inline-block; margin: 10px auto; padding: 5px 15px;
-      border-radius: 20px; font-weight: bold; font-size: 1.1rem;
-      transition: background-color 0.5s ease, color 0.5s ease;
+      font-size: 7px;
+      margin-top: 2px;
+      padding: 1px 4px;
+      border-radius: 10px;
+      display: inline-block;
     }
-    .pm-info { margin-top: 1rem; color: #9ca3af; font-size: 0.9rem; }
-    .scale-bar { display: flex; margin: 1.5rem 0 0.5rem; height: 10px; border-radius: 5px; overflow: hidden; }
-    .scale-bar div { flex: 1; }
-    .green { background: #22c55e; }
-    .yellow { background: #facc15; }
-    .orange { background: #fb923c; }
-    .red { background: #ef4444; }
-    .purple { background: #8b5cf6; }
-    .maroon { background: #7f1d1d; }
-    .scale-numbers {
-      display: flex; justify-content: space-between;
-      font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem;
-    }
+
     .weather-stats {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 10px; margin-top: 1.5rem; color: #cbd5e1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      font-size: 6px;
+      margin-top: 4px;
+      color: #cbd5e1;
     }
-    .traffic-updates {
-      background: rgba(31,41,55,0.8); margin-top: 1.5rem; padding: 1rem;
-      border-radius: 10px; opacity: 0; animation: fadeIn 1s forwards 1s;
+
+    .last-updated {
+      margin-top: 3px;
+      font-size: 6px;
+      color: #9ca3af;
     }
-    .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
-    .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
-    .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
-    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
   </style>
 </head>
-
 <body>
 
-<!-- Background Video -->
-<video autoplay muted loop playsinline class="background-video">
-  <source src="https://github.com/amishav31/Cloud_DISPLAY/raw/refs/heads/main/5339802-hd_1920_1080_30fps.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-<!-- Dashboard -->
-<div class="container">
-  <h1 id="dashboard-title">Lucknow Air Quality Index (AQI)</h1>
+<div class="screen">
+  <h1>Lucknow AQI</h1>
 
   <div class="aqi-box" id="aqi-card">
     <div id="aqi-value" class="aqi-value">--</div>
     <div id="aqi-status" class="status">--</div>
-    <div class="pm-info">
-      <p>PM10: <span id="pm10">--</span> µg/m³</p>
-      <p>PM2.5: <span id="pm25">--</span> µg/m³</p>
-    </div>
-
-    <div class="scale-bar">
-      <div class="green"></div><div class="yellow"></div><div class="orange"></div>
-      <div class="red"></div><div class="purple"></div><div class="maroon"></div>
-    </div>
-
-    <div class="scale-numbers">
-      <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
+    <div style="font-size:6px">
+      PM10: <span id="pm10">--</span> | PM2.5: <span id="pm25">--</span>
     </div>
   </div>
 
   <div class="weather-stats">
-    <div>🌡️ Temperature: <span id="temperature">--</span>°C</div>
-    <div>💧 Humidity: <span id="humidity">--</span>%</div>
-    <div>🌬️ Wind Speed: <span id="wind">--</span> km/h</div>
-    <div>🌞 UV Index: <span id="uv">--</span></div>
+    <div>🌡 Temp: <span id="temperature">--</span>°C</div>
+    <div>💧 Humid: <span id="humidity">--</span>%</div>
+    <div>🌬 Wind: <span id="wind">--</span> km/h</div>
+    <div>☀ UV: <span id="uv">--</span></div>
   </div>
 
-  <div class="traffic-updates">
-    <h2>Traffic Updates</h2>
-    <ul id="traffic-list"><li>Loading...</li></ul>
-  </div>
-
-  <div id="last-updated" class="last-updated">Last updated: --</div>
+  <div class="last-updated" id="last-updated">Last updated: --</div>
 </div>
 
 <script>
 async function fetchAirQuality() {
   try {
     const token = "5e9fe29ab94a25e359677d0aa8456fb820c34e3b";
-    const city = "Lucknow"; // You can change this to any city like 'Delhi', 'Mumbai', etc.
-
+    const city = "Lucknow";
     const res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
     const data = await res.json();
 
-    if (data.status !== "ok") {
-      throw new Error("Failed to fetch AQI data");
-    }
+    if (data.status !== "ok") throw new Error("Failed to fetch AQI");
 
     const aqi = data.data.aqi;
-    const pm25 = data.data.iaqi.pm25?.v || null;
-    const pm10 = data.data.iaqi.pm10?.v || null;
+    const pm25 = data.data.iaqi.pm25?.v || "--";
+    const pm10 = data.data.iaqi.pm10?.v || "--";
 
     let status = "", bgColor = "";
 
@@ -138,64 +122,45 @@ async function fetchAirQuality() {
     else if (aqi <= 400) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
     else { status = "Severe 🚨"; bgColor = "#7f1d1d"; }
 
-    document.getElementById('aqi-value').textContent = aqi;
-    document.getElementById('pm25').textContent = pm25 ? pm25.toFixed(1) : "--";
-    document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
-    document.getElementById('aqi-status').textContent = status;
-    document.getElementById('aqi-status').style.backgroundColor = bgColor;
-    document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
-
-  } catch (error) {
-    console.error('Air Quality fetch error:', error);
-    document.getElementById('aqi-status').textContent = "Error fetching AQI";
+    document.getElementById("aqi-value").textContent = aqi;
+    document.getElementById("pm25").textContent = pm25;
+    document.getElementById("pm10").textContent = pm10;
+    document.getElementById("aqi-status").textContent = status;
+    document.getElementById("aqi-status").style.backgroundColor = bgColor;
+  } catch (e) {
+    console.error(e);
   }
 }
-fetchAirQuality();
+
 async function fetchWeather() {
   try {
-    const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
-    const weatherRes = await fetch(weatherApi);
-    const weatherData = await weatherRes.json();
-    const temp = weatherData.current_weather.temperature;
-    const wind = weatherData.current_weather.windspeed;
-    const humidity = Math.floor(Math.random() * 50) + 30;
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`);
+    const data = await res.json();
+    const temp = data.current_weather.temperature;
+    const wind = data.current_weather.windspeed;
+    const humidity = Math.floor(Math.random() * 40) + 30;
     const uvIndex = Math.floor(Math.random() * 11);
 
-    document.getElementById('temperature').textContent = temp;
-    document.getElementById('humidity').textContent = humidity;
-    document.getElementById('wind').textContent = wind;
-    document.getElementById('uv').textContent = uvIndex;
-  } catch (error) {
-    console.error('Weather fetch error:', error);
+    document.getElementById("temperature").textContent = temp;
+    document.getElementById("wind").textContent = wind;
+    document.getElementById("humidity").textContent = humidity;
+    document.getElementById("uv").textContent = uvIndex;
+  } catch (e) {
+    console.error(e);
   }
 }
 
-async function fetchTraffic() {
-  try {
-    document.getElementById('traffic-list').innerHTML = `
-      <li>Current Speed: 35 km/h</li>
-      <li>Free Flow Speed: 50 km/h</li>
-      <li>Congestion Level: 30% 🚗</li>
-    `;
-  } catch (error) {
-    console.error('Traffic fetch error:', error);
-  }
-}
-
-async function fetchAllData() {
+async function updateAll() {
   await fetchAirQuality();
   await fetchWeather();
-  await fetchTraffic();
-
-  const now = new Date();
-  document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
+  document.getElementById("last-updated").textContent = "Last updated: " + new Date().toLocaleTimeString();
 }
 
-// Initial Load
-fetchAllData();
-setInterval(fetchAllData, 5 * 60 * 1000); // Refresh every 5 min
+updateAll();
+setInterval(updateAll, 5 * 60 * 1000);
 </script>
 
 </body>
 </html>
+
 
