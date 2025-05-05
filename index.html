@@ -80,13 +80,14 @@
 </head>
 
 <body>
-
+<button onclick="toggleDayNight()" id="toggle-btn" style="margin-top: 10px; padding: 5px 15px; border: none; border-radius: 5px; background: #4b5563; color: white; cursor: pointer;">
+  Switch to Night Mode
+</button>
 <!-- Background Video -->
-<video autoplay muted loop playsinline class="background-video">
-  <source src="https://github.com/amishav31/Cloud_DISPLAY/raw/refs/heads/main/5339802-hd_1920_1080_30fps.mp4" type="video/mp4">
-  Your browser does not support the video tag.
+<video id="bg-video" autoplay muted loop playsinline class="background-video">
+  <source id="video-source" src="" type="video/mp4">
+  Your browser does not support video tags.
 </video>
-
 <!-- Dashboard -->
 <div class="container">
   <h1 id="dashboard-title">Lucknow Air Quality Index (AQI)</h1>
@@ -125,6 +126,40 @@
 </div>
 
 <script>
+  // Switch background video based on current time
+let manualOverride = false;
+let isDay = true; // Default
+
+function setVideoByTime() {
+  if (manualOverride) return; // Skip if user toggled manually
+
+  const hour = new Date().getHours();
+  isDay = hour >= 6 && hour < 18;
+  applyVideo(isDay);
+}
+
+function applyVideo(dayMode) {
+  const video = document.getElementById("bg-video");
+  const source = document.getElementById("video-source");
+  const toggleBtn = document.getElementById("toggle-btn");
+
+  if (dayMode) {
+    source.src = "https://github.com/amishav31/Day-time/raw/main/1452688-sd_638_360_30fps.mp4";
+    toggleBtn.textContent = "Switch to Night Mode";
+  } else {
+    source.src = "https://github.com/amishav31/Night-time/raw/main/8064154-hd_1920_1080_30fps.mp4";
+    toggleBtn.textContent = "Switch to Day Mode";
+  }
+  video.load();
+}
+
+function toggleDayNight() {
+  manualOverride = true;
+  isDay = !isDay;
+  applyVideo(isDay);
+}
+
+setVideoByTime(); // On load
 async function fetchAirQuality() {
   try {
     const token = "5e9fe29ab94a25e359677d0aa8456fb820c34e3b";
