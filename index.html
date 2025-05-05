@@ -76,6 +76,20 @@
     .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+    /* Night mode overrides */
+  body.night-mode {
+    background-color: #000;
+  }
+
+  body. night-mode .container {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  body.night-mode .aqi-box,
+  body.night-mode .traffic-updates {
+    background: rgba(0, 0, 0, 0.5);
+  }
   </style>
 </head>
 
@@ -146,9 +160,11 @@ function applyVideo(dayMode) {
   if (dayMode) {
     source.src = "https://github.com/amishav31/Day-time/raw/main/1452688-sd_638_360_30fps.mp4";
     toggleBtn.textContent = "Switch to Night Mode";
+    document.body.classList.remove("night-mode");
   } else {
     source.src = "https://github.com/amishav31/Night-time/raw/main/8064154-hd_1920_1080_30fps.mp4";
     toggleBtn.textContent = "Switch to Day Mode";
+    document.body.classList.add("night-mode");
   }
   video.load();
 }
