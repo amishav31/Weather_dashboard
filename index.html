@@ -82,7 +82,7 @@
     background-color: #000;
   }
 
-  body. night-mode .container {
+  body.night-mode .container {
     background: rgba(0, 0, 0, 0.7);
   }
 
@@ -228,11 +228,11 @@ async function fetchWeather() {
 async function fetchTraffic() {
   try {
     // Dummy traffic info – customize using real API if available
-    document.getElementById('traffic-list').innerHTML = 
+    document.getElementById('traffic-list').innerHTML = '
       <li>Current Speed: 35 km/h</li>
       <li>Free Flow Speed: 50 km/h</li>
       <li>Congestion Level: 30% 🚗</li>
-    ;
+    ';
   } catch (error) {
     console.error('Traffic fetch error:', error);
   }
