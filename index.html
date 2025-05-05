@@ -68,7 +68,7 @@
       display: grid; grid-template-columns: repeat(2, 1fr);
       gap: 10px; margin-top: 1.5rem; color: #cbd5e1;
     }
-     .traffic-updates {
+    .traffic-updates {
       background: rgba(31,41,55,0.8); margin-top: 1.5rem; padding: 1rem;
       border-radius: 10px; opacity: 0; animation: fadeIn 1s forwards 1s;
     }
@@ -82,7 +82,7 @@
     background-color: #000;
   }
 
-  body.night-mode .container {
+  body. night-mode .container {
     background: rgba(0, 0, 0, 0.7);
   }
 
@@ -130,10 +130,12 @@
     <div>🌬️ Wind Speed: <span id="wind">--</span> km/h</div>
     <div>🌞 UV Index: <span id="uv">--</span></div>
   </div>
+
   <div class="traffic-updates">
     <h2>Traffic Updates</h2>
     <ul id="traffic-list"><li>Loading...</li></ul>
   </div>
+
   <div id="last-updated" class="last-updated">Last updated: --</div>
 </div>
 
@@ -178,7 +180,7 @@ async function fetchAirQuality() {
   try {
     const token = "5e9fe29ab94a25e359677d0aa8456fb820c34e3b";
     const city = "Lucknow";
-    const res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
+    const res = await fetch(https://api.waqi.info/feed/${city}/?token=${token});
     const data = await res.json();
 
     if (data.status !== "ok") throw new Error("Failed to fetch AQI data");
@@ -200,7 +202,7 @@ async function fetchAirQuality() {
     document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
     document.getElementById('aqi-status').textContent = status;
     document.getElementById('aqi-status').style.backgroundColor = bgColor;
-    document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+    document.getElementById('aqi-card').style.boxShadow = 0 0 20px ${bgColor}80;
   } catch (error) {
     console.error('Air Quality fetch error:', error);
     document.getElementById('aqi-status').textContent = "Error fetching AQI";
@@ -209,7 +211,7 @@ async function fetchAirQuality() {
 
 async function fetchWeather() {
   try {
-    const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true`;
+    const weatherApi = https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true;
     const weatherRes = await fetch(weatherApi);
     const weatherData = await weatherRes.json();
     const temp = weatherData.current_weather.temperature;
@@ -225,14 +227,15 @@ async function fetchWeather() {
     console.error('Weather fetch error:', error);
   }
 }
+
 async function fetchTraffic() {
   try {
     // Dummy traffic info – customize using real API if available
-    document.getElementById('traffic-list').innerHTML = '
+    document.getElementById('traffic-list').innerHTML = 
       <li>Current Speed: 35 km/h</li>
       <li>Free Flow Speed: 50 km/h</li>
       <li>Congestion Level: 30% 🚗</li>
-    ';
+    ;
   } catch (error) {
     console.error('Traffic fetch error:', error);
   }
@@ -252,3 +255,5 @@ setInterval(fetchAllData, 5 * 60 * 1000); // Auto-refresh every 5 minutes
 
 </body>
 </html>
+
+
