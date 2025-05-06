@@ -56,12 +56,6 @@
       display: grid; grid-template-columns: repeat(2, 1fr);
       gap: 10px; margin-top: 1.5rem; color: #cbd5e1;
     }
-    .traffic-updates {
-      background: rgba(31,41,55,0.8); margin-top: 1.5rem; padding: 1rem;
-      border-radius: 10px; opacity: 0; animation: fadeIn 1s forwards 1s;
-    }
-    .traffic-updates h2 { font-size: 1.2rem; color: #60a5fa; margin-bottom: 10px; }
-    .traffic-updates ul { list-style-type: disc; padding-left: 20px; color: #cbd5e1; }
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
@@ -73,8 +67,7 @@
       background: rgba(0, 0, 0, 0.7);
     }
 
-    body.night-mode .aqi-box,
-    body.night-mode .traffic-updates {
+    body.night-mode .aqi-box {
       background: rgba(0, 0, 0, 0.5);
     }
   </style>
@@ -113,11 +106,6 @@
       <div>💧 Humidity: <span id="humidity">--</span>%</div>
       <div>🌬️ Wind Speed: <span id="wind">--</span> km/h</div>
       <div>🌞 UV Index: <span id="uv">--</span></div>
-    </div>
-
-    <div class="traffic-updates">
-      <h2>Traffic Updates</h2>
-      <ul id="traffic-list"><li>Loading...</li></ul>
     </div>
 
     <div id="last-updated" class="last-updated">Last updated: --</div>
@@ -211,22 +199,9 @@
       }
     }
 
-    async function fetchTraffic() {
-      try {
-        document.getElementById('traffic-list').innerHTML = `
-          <li>Current Speed: 35 km/h</li>
-          <li>Free Flow Speed: 50 km/h</li>
-          <li>Congestion Level: 30% 🚗</li>
-        `;
-      } catch (error) {
-        console.error('Traffic fetch error:', error);
-      }
-    }
-
     async function fetchAllData() {
       await fetchAirQuality();
       await fetchWeather();
-      await fetchTraffic();
       const now = new Date();
       document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
     }
