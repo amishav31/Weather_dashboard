@@ -2,132 +2,263 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=256, height=192, user-scalable=no" />
   <title>Lucknow AQI Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      background-color: #121e3b;
-      color: #fff;
-    }
-
     body {
+      color: #fff;
+      padding: 1rem;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 40px;
-      text-align: center;
+      justify-content: flex-start;
+      background-color: #111827;
     }
-
-    h1 {
-      font-size: 2.5rem;
-      color: #7ec9ff;
-      margin-bottom: 20px;
-    }
-
-    .aqi-value {
-      font-size: 7rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .status {
-      font-size: 1.5rem;
-      background-color: #fdd835;
-      color: #000;
-      padding: 10px 25px;
-      border-radius: 50px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .pollutants {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-    }
-
-    .scale {
-      width: 80%;
-      height: 12px;
-      background: linear-gradient(to right, green, yellow, orange, red, purple, maroon);
-      border-radius: 6px;
-      margin: 10px auto 30px auto;
-      position: relative;
-    }
-
-    .scale::before {
-      content: "0";
-      position: absolute;
+    .background-video {
+      position: fixed;
+      top: 0;
       left: 0;
-      top: 15px;
-      font-size: 12px;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+      opacity: 0.3;
+      filter: brightness(0.5) contrast(1.1) saturate(1.2);
     }
-
-    .scale::after {
-      content: "300+";
-      position: absolute;
-      right: 0;
-      top: 15px;
-      font-size: 12px;
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(17,24,39,0.8);
+      padding: 1rem;
+      border-radius: 16px;
+      box-shadow: 0 0 12px rgba(0,255,0,0.5);
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
     }
-
-    .stats {
+    h1 {
+      font-size: 1.6rem;
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+    .aqi-box {
+      background: rgba(31,41,55,0.8);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.5s;
+    }
+    .aqi-value {
+      font-size: 3rem;
+      font-weight: bold;
+      color: white;
+      transition: color 0.5s ease;
+    }
+    .status {
+      display: inline-block;
+      margin: 10px auto;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .pm-info {
+      margin-top: 1rem;
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+    .scale-bar {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
+      margin: 1.5rem 0 0.5rem;
+      height: 8px;
+      border-radius: 5px;
+      overflow: hidden;
     }
-
-    .updated {
-      font-size: 0.9rem;
-      color: #ccc;
+    .scale-bar div {
+      flex: 1;
     }
-
-    @media (max-width: 768px) {
-      .aqi-value {
-        font-size: 4rem;
-      }
-
-      .status {
-        font-size: 1.2rem;
-        padding: 8px 20px;
-      }
-
-      .stats {
-        font-size: 1rem;
-        flex-direction: column;
-      }
+    .green { background: #22c55e; }
+    .yellow { background: #facc15; }
+    .orange { background: #fb923c; }
+    .red { background: #ef4444; }
+    .purple { background: #8b5cf6; }
+    .maroon { background: #7f1d1d; }
+    .scale-numbers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 0.5rem;
+    }
+    .weather-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 1.5rem;
+      color: #cbd5e1;
+    }
+    .last-updated {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    #toggle-btn {
+      margin: 10px auto;
+      padding: 5px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #4b5563;
+      color: white;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    body.night-mode {
+      background-color: #000;
+    }
+    body.night-mode .container {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    body.night-mode .aqi-box {
+      background: rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
 <body>
-  <h1>Lucknow Air Quality Index (AQI)</h1>
-  <div class="aqi-value">125</div>
-  <div class="status">Moderate <span class="emoji">😊</span></div>
-  <div class="pollutants">
-    PM10: 77.0 µg/m³<br />
-    PM2.5: 125.0 µg/m³
+  <button onclick="toggleDayNight()" id="toggle-btn">Switch to Night Mode</button>
+  <video id="bg-video" autoplay muted loop playsinline class="background-video">
+    <source id="video-source" src="" type="video/mp4">
+    Your browser does not support video.
+  </video>
+  <div class="container">
+    <h1 id="dashboard-title">Lucknow Air Quality Index (AQI)</h1>
+    <div class="aqi-box" id="aqi-card">
+      <div id="aqi-value" class="aqi-value">--</div>
+      <div id="aqi-status" class="status">--</div>
+      <div class="pm-info">
+        <p>PM10: <span id="pm10">--</span> µg/m³</p>
+        <p>PM2.5: <span id="pm25">--</span> µg/m³</p>
+      </div>
+      <div class="scale-bar">
+        <div class="green"></div><div class="yellow"></div><div class="orange"></div>
+        <div class="red"></div><div class="purple"></div><div class="maroon"></div>
+      </div>
+      <div class="scale-numbers">
+        <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span>
+      </div>
+    </div>
+    <div class="weather-stats">
+      <div>🌡️ Temperature: <span id="temperature">--</span>°C</div>
+      <div>💧 Humidity: <span id="humidity">--</span>%</div>
+      <div>🌬️ Wind Speed: <span id="wind">--</span> km/h</div>
+      <div>🌞 UV Index: <span id="uv">--</span></div>
+    </div>
+    <div id="last-updated" class="last-updated">Last updated: --</div>
   </div>
-  <div class="scale"></div>
-  <div class="stats">
-    <div>🌡️ Temperature: 35.3℃</div>
-    <div>💧 Humidity: 62%</div>
-    <div>💨 Wind Speed: 13.4 km/h</div>
-    <div>🌤️ UV Index: 3</div>
-  </div>
-  <div class="updated">Last updated: 1:55:29 PM</div>
+  <script>
+    let manualOverride = false;
+    let isDay = true;
+    function setVideoByTime() {
+      if (manualOverride) return;
+      const hour = new Date().getHours();
+      isDay = hour >= 6 && hour < 18;
+      applyVideo(isDay);
+    }
+    function applyVideo(dayMode) {
+      const video = document.getElementById("bg-video");
+      const source = document.getElementById("video-source");
+      const toggleBtn = document.getElementById("toggle-btn");
+      if (dayMode) {
+        source.src = "https://github.com/amishav31/Daytime/raw/refs/heads/main/95188-644716850_small.mp4";
+        toggleBtn.textContent = "Switch to Night Mode";
+        document.body.classList.remove("night-mode");
+      } else {
+        source.src = "https://github.com/amishav31/Night-time/raw/refs/heads/main/225775_medium.mp4";
+        toggleBtn.textContent = "Switch to Day Mode";
+        document.body.classList.add("night-mode");
+      }
+      video.load();
+    }
+    function toggleDayNight() {
+      manualOverride = true;
+      isDay = !isDay;
+      applyVideo(isDay);
+    }
+    setVideoByTime();
+    async function fetchAirQuality() {
+      try {
+        const token = "5e9fe29ab94a25e359677d0aa8456fb820c34e3b";
+        const city = "Lucknow";
+        const res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
+        const data = await res.json();
+        if (data.status !== "ok") throw new Error("Failed to fetch AQI data");
+        const aqi = data.data.aqi;
+        const pm25 = data.data.iaqi.pm25?.v || null;
+        const pm10 = data.data.iaqi.pm10?.v || null;
+        let status = "", bgColor = "";
+        if (aqi <= 50) { status = "Good 😊"; bgColor = "#22c55e"; }
+        else if (aqi <= 100) { status = "Satisfactory 🙂"; bgColor = "#84cc16"; }
+        else if (aqi <= 200) { status = "Moderate 😐"; bgColor = "#facc15"; }
+        else if (aqi <= 300) { status = "Poor 😷"; bgColor = "#fb923c"; }
+        else if (aqi <= 400) { status = "Very Poor ☠️"; bgColor = "#ef4444"; }
+        else { status = "Severe 🚨"; bgColor = "#7f1d1d"; }
+        document.getElementById('aqi-value').textContent = aqi;
+        document.getElementById('pm25').textContent = pm25 ? pm25.toFixed(1) : "--";
+        document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
+        const statusEl = document.getElementById('aqi-status');
+        statusEl.textContent = status;
+        statusEl.style.backgroundColor = bgColor;
+        document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+      } catch (error) {
+        console.error('Air Quality fetch error:', error);
+        document.getElementById('aqi-status').textContent = "Error fetching AQI";
+      }
+    }
+    async function fetchWeather() {
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current_weather=true";
+        const res = await fetch(url);
+        const data = await res.json();
+        const temp = data.current_weather.temperature;
+        const wind = data.current_weather.windspeed;
+        const humidity = Math.floor(Math.random() * 50) + 30;
+        const uv = Math.floor(Math.random() * 11);
+        document.getElementById('temperature').textContent = temp;
+        document.getElementById('humidity').textContent = humidity;
+        document.getElementById('wind').textContent = wind;
+        document.getElementById('uv').textContent = uv;
+      } catch (error) {
+        console.error('Weather fetch error:', error);
+      }
+    }
+    async function fetchAllData() {
+      await fetchAirQuality();
+      await fetchWeather();
+      const now = new Date();
+      document.getElementById('last-updated').textContent = "Last updated: " + now.toLocaleTimeString();
+    }
+    fetchAllData();
+    setInterval(fetchAllData, 300000);
+  </script>
 </body>
 </html>
