@@ -51,14 +51,21 @@
 }
 
     h1 { font-size: 1.8rem; color: #60a5fa; margin-bottom: 1rem; }
-    .aqi-box {
-      background: rgba(31,41,55,0.8); padding: 2rem; border-radius: 15px;
-      margin-bottom: 1rem; opacity: 0; animation: fadeIn 1s forwards 0.5s;
-    }
-    .aqi-value { font-size: 3.5rem; font-weight: bold; color: white; transition: color 0.5s ease; }
+  .aqi-box {
+  background: rgba(31,41,55,0.8);
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  width: 80vw;           /* ✅ Wider */
+  max-width: 800px;      /* ✅ Limit max width */
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.5s;
+}
+
+    .aqi-value { font-size: 4rem; font-weight: bold; color: white; transition: color 0.5s ease; }
     .status {
       display: inline-block; margin: 10px auto; padding: 5px 15px;
-      border-radius: 20px; font-weight: bold; font-size: 1.1rem;
+      border-radius: 20px; font-weight: bold; font-size: 1.3rem;
       transition: background-color 0.5s ease, color 0.5s ease;
     }
     .pm-info { margin-top: 1rem; color: #9ca3af; font-size: 0.9rem; }
