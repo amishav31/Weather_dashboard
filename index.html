@@ -59,20 +59,11 @@
     .last-updated { margin-top: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
-    body.night-mode {
-      background-color: #000;
-    }
-
-    body.night-mode .container {
-      background: rgba(0, 0, 0, 0.7);
-    }
-
-    body.night-mode .aqi-box {
-      background: rgba(0, 0, 0, 0.5);
-    }
+    body.night-mode { background-color: #000; }
+    body.night-mode .container { background: rgba(0, 0, 0, 0.7); }
+    body.night-mode .aqi-box { background: rgba(0, 0, 0, 0.5); }
   </style>
 </head>
-
 <body>
   <button onclick="toggleDayNight()" id="toggle-btn" style="margin-top: 10px; padding: 5px 15px; border: none; border-radius: 5px; background: #4b5563; color: white; cursor: pointer;">
     Switch to Night Mode
