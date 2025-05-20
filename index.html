@@ -259,7 +259,7 @@
         document.getElementById('pm10').textContent = pm10 ? pm10.toFixed(1) : "--";
         document.getElementById('aqi-status').textContent = status;
         document.getElementById('aqi-status').style.backgroundColor = bgColor;
-        document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
+        //document.getElementById('aqi-card').style.boxShadow = `0 0 20px ${bgColor}80`;
       } catch (error) {
         console.error('Air Quality fetch error:', error);
         document.getElementById('aqi-status').textContent = "Error fetching AQI";
